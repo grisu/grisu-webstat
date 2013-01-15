@@ -102,10 +102,14 @@ public class GrisuUserApp extends Application {
 			final JobTable jobTab = new JobTable("Jobs for selected user");
 			vertiSplitPanel.addComponent(jobTab);
 			
-			vertiSplitPanel.addComponent(temptab);
+			//vertiSplitPanel.addComponent(temptab);
 			
 			horiSplitPanel.addComponent(vertiSplitPanel);
-			
+			System.out.println("compheight"+horiSplitPanel.getFirstComponent().getParent().getHeightUnits());
+			horiSplitPanel.setHeight("100%");
+			System.out.println("panelheight"+horiSplitPanel.getHeightUnits()+".."+mainWindow.getHeightUnits());
+			horiSplitPanel.getFirstComponent().setSizeFull();
+			//horiSplitPanel.getFirstComponent()
 			userTab.addListener(new ValueChangeListener() {
 				
 				public void valueChange(ValueChangeEvent event) {
@@ -114,6 +118,20 @@ public class GrisuUserApp extends Application {
 					jobTab.populate(selectedUser.getDn());
 				}
 			});
+			
+			final JobDetComponent jobDets = new JobDetComponent();
+			vertiSplitPanel.addComponent(jobDets);
+			
+			jobTab.addListener(new ValueChangeListener() {
+				
+				public void valueChange(ValueChangeEvent event) {
+					// TODO Auto-generated method stub
+					JobStat selectedJob = (JobStat)jobTab.getSelectedJob();
+					jobDets.populate(selectedJob);
+				}
+			});
+			
+			
 			
 			
 		//	t2.setContainerDataSource(jobStatContainer);

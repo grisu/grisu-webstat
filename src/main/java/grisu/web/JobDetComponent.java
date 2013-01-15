@@ -307,4 +307,14 @@ public class JobDetComponent extends CustomComponent {
 		return subTypeLayout;
 	}
 	
+	public void populate(JobStat job){
+
+		txtJobName.setValue(job.getJobname());
+		txtDn.setValue(job.getDn());
+		txtFqan.setValue(job.getFqan());
+		txtStatus.setValue(job.getStatus());
+		txtSubDes.setValue(job.getSubmittedJobDescription());
+		txtSubType.setValue(job.getSubmissionType());				
+	}
+	
 }
