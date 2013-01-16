@@ -72,6 +72,8 @@ public class JobDetComponent extends CustomComponent {
 		setCompositionRoot(mainLayout);
 
 		// TODO add user code here
+		mainLayout.getContent().setSizeFull();
+		mainLayout.setCaption("Job Details");
 	}
 
 	public void setJobDetails(JobStat job)
@@ -109,8 +111,8 @@ public class JobDetComponent extends CustomComponent {
 		// common part: create layout
 		jobDetLayout = new VerticalLayout();
 		jobDetLayout.setImmediate(false);
-		jobDetLayout.setWidth("538px");
-		jobDetLayout.setHeight("340px");
+		jobDetLayout.setWidth("100%");
+		jobDetLayout.setHeight("100%");
 		jobDetLayout.setMargin(true);
 		
 		// jobNameLayout
@@ -309,12 +311,14 @@ public class JobDetComponent extends CustomComponent {
 	
 	public void populate(JobStat job){
 
-		txtJobName.setValue(job.getJobname());
-		txtDn.setValue(job.getDn());
-		txtFqan.setValue(job.getFqan());
-		txtStatus.setValue(job.getStatus());
-		txtSubDes.setValue(job.getSubmittedJobDescription());
-		txtSubType.setValue(job.getSubmissionType());				
+		if(job!=null){
+			txtJobName.setValue(job.getJobname());
+			txtDn.setValue(job.getDn());
+			txtFqan.setValue(job.getFqan());
+			txtStatus.setValue(job.getStatus());
+			txtSubDes.setValue(job.getSubmittedJobDescription());
+			txtSubType.setValue(job.getSubmissionType());
+		}
 	}
 	
 }
