@@ -204,9 +204,7 @@
     <dependency>
     	<groupId>grisu.backend</groupId>
     	<artifactId>grisu-core</artifactId>
-    	<version>0.5.14-SNAPSHOT</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
+    	<version>0.5.15-SNAPSHOT</version>
     </dependency>
     <dependency>
    <groupId>org.vaadin.addons</groupId>
