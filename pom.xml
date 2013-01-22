@@ -8,9 +8,9 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
   <groupId>grisu.web</groupId>
-  <artifactId>grisu-web</artifactId>
+  <artifactId>grisu-webstat</artifactId>
   <packaging>war</packaging>
-  <version>1.0</version>
+  <version>0.1-SNAPSHOT</version>
   <name>Vaadin Web Application</name>
 
   <properties>
