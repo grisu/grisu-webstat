@@ -117,6 +117,7 @@ public class GrisuUserApp extends Application {
 		
 
 		mainWindow.addComponent(refresher);
+		refresher.setEnabled(false);
 	}
 
 }
