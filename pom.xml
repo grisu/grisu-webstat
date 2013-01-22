@@ -32,7 +32,7 @@
       </plugin>
 
       <!-- Compile custom GWT components or widget dependencies with the GWT compiler -->
-      <!--
+      
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
@@ -81,7 +81,7 @@
           </execution>
         </executions>
       </plugin>
-      -->
+      
 
       <!-- A simple Jetty test server at http://localhost:8080/grisu-web can be launched with the Maven goal jetty:run 
         and stopped with jetty:stop -->
@@ -208,6 +208,12 @@
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
+    <dependency>
+   <groupId>org.vaadin.addons</groupId>
+   <artifactId>refresher</artifactId>
+   <version>1.1.1</version>
+</dependency>
+    
   </dependencies>
 
 </project>

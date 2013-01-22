@@ -1,6 +1,7 @@
 package grisu.web;
 
 import grisu.backend.hibernate.JobDAO;
+
 import grisu.backend.hibernate.JobStatDAO;
 import grisu.backend.hibernate.UserDAO;
 import grisu.backend.model.User;
@@ -31,6 +32,9 @@ import com.vaadin.ui.Window.ResizeListener;
 
 //import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.github.wolfie.refresher.Refresher;
+import com.github.wolfie.refresher.Refresher.RefreshListener;
+
 
 public class GrisuUserApp extends Application {
 	@Override
@@ -40,12 +44,18 @@ public class GrisuUserApp extends Application {
 		final Table t2 = new Table("Job Table");
 
 		final UserTable userTab = new UserTable("Users");
-	//	userTab.populate();
 
+		VerticalLayout layout= new VerticalLayout();
+		
 		HorizontalSplitPanel horiSplitPanel = new HorizontalSplitPanel();
-		mainWindow.setContent(horiSplitPanel);
+		layout.addComponent(horiSplitPanel);
+		mainWindow.setContent(layout);
 		horiSplitPanel.addComponent(userTab);
 		userTab.setHeight("100%");
+		horiSplitPanel.setSizeFull();
+		horiSplitPanel.setHeight("100%");
+		layout.getComponent(0).setSizeFull();
+		layout.setExpandRatio(horiSplitPanel, 1.0f);
 
 		VerticalSplitPanel vertiSplitPanel = new VerticalSplitPanel();
 		final JobTable jobTab = new JobTable("Jobs for selected user");
@@ -61,8 +71,9 @@ public class GrisuUserApp extends Application {
 			public void valueChange(ValueChangeEvent event) {
 				// TODO Auto-generated method stub
 				Users selectedUser = (Users) userTab.getSelectedUser();
-				if(selectedUser!=null)
-					jobTab.populate(selectedUser.getDn());
+				if(selectedUser!=null){
+					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount());
+				}
 			}
 		});
 		
@@ -77,25 +88,35 @@ public class GrisuUserApp extends Application {
 				jobDets.populate(selectedJob);
 			}
 		});
-
-		userTab.populate();
+		
+		vertiSplitPanel.getSecondComponent().setSizeFull();
 		
 		mainWindow.getContent().setSizeFull();
 
-		mainWindow.addListener(new ResizeListener() {
+		setMainWindow(mainWindow);
 
-			public void windowResized(ResizeEvent e) {
+		userTab.populate();
+		
+		final Refresher refresher = new Refresher();
+		refresher.setRefreshInterval(5000);
+		
+		refresher.setHeight("1%");
+		
+		refresher.addListener(new RefreshListener() {
+			
+			public void refresh(Refresher source) {
 				// TODO Auto-generated method stub
-				userTab.setPageSize();
-
+				userTab.refresh();
+				//reload the job pane and job-details pane
+				Users selectedUser = (Users) userTab.getSelectedUser();
+				if(selectedUser!=null){
+					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount());
+				}
 			}
 		});
+		
 
-		setMainWindow(mainWindow);
+		mainWindow.addComponent(refresher);
 	}
 
-	public static void main(String[] args) {
-		GrisuUserApp g = new GrisuUserApp();
-		g.init();
-	}
 }
