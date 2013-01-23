@@ -96,8 +96,8 @@ public class UserTable extends CustomComponent {
 
 		userContainer.addAll(userList);
 		tblUser.setContainerDataSource(userContainer);
-		tblUser.setVisibleColumns(new Object [] {"userName", "activeJobCount", "jobCount"});
-		tblUser.setColumnHeaders(new String[] {"User Names","Active Jobs","Total jobs"});
+		tblUser.setVisibleColumns(new Object [] {"userName", "pendingJobCount", "runningJobCount", "jobCount"});
+		tblUser.setColumnHeaders(new String[] {"User Names","Pending Jobs","Running Jobs", "Total jobs"});
 		
 		tblUser.select(tblUser.firstItemId());
 
@@ -110,12 +110,21 @@ public class UserTable extends CustomComponent {
 				if(obj1 instanceof String && obj2 instanceof String)
 				{
 					int i1, i2;
+					String s1=(String)obj1;
+					String s2=(String)obj2;
 					try{
-						i1=Integer.parseInt((String)obj1);
-						i2=Integer.parseInt((String)obj2);
+						if(s1.contains("("))
+						{
+							s1=s1.substring(0,s1.indexOf("(")-1);
+							s2=s2.substring(0,s2.indexOf("(")-1);
+							System.out.println(s1+":"+s2);
+						}
+						i1=Integer.parseInt(s1);
+						i2=Integer.parseInt(s2);
 						return (i1-i2);
 					}
 					catch(NumberFormatException nfe){
+						System.out.println("nfe "+nfe.getMessage());
 						return ((String)obj1).toLowerCase().compareTo(((String) obj2).toLowerCase());
 					}
 				}
@@ -135,12 +144,15 @@ public class UserTable extends CustomComponent {
 		
 		Item tblItem=null;
 		String dn=null;
+		int running;
 		for(Object id:tblUser.getItemIds())
 		{
 			tblItem=tblUser.getItem(id);
 			dn=(String) tblItem.getItemProperty("dn").getValue();
+			running = jsDao.findRunningJobCount(dn);
 			tblItem.getItemProperty("jobCount").setValue(""+jsDao.findJobCount(dn));
-			tblItem.getItemProperty("activeJobCount").setValue(jsDao.findActiveJobCount(dn));
+			tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
+			tblItem.getItemProperty("runningJobCount").setValue(""+running);
 		}
 	}	
 	
