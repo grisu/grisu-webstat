@@ -32,8 +32,8 @@ import com.vaadin.ui.Window.ResizeListener;
 
 //import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-//import com.github.wolfie.refresher.Refresher;
-//import com.github.wolfie.refresher.Refresher.RefreshListener;
+import com.github.wolfie.refresher.Refresher;
+import com.github.wolfie.refresher.Refresher.RefreshListener;
 
 
 public class GrisuUserApp extends Application {
@@ -96,28 +96,28 @@ public class GrisuUserApp extends Application {
 		setMainWindow(mainWindow);
 
 		userTab.populate();
-//		
-//		final Refresher refresher = new Refresher();
-//		refresher.setRefreshInterval(5000);
-//		
-//		refresher.setHeight("1%");
-//		
-//		refresher.addListener(new RefreshListener() {
-//			
-//			public void refresh(Refresher source) {
-//				// TODO Auto-generated method stub
-//				userTab.refresh();
-//				//reload the job pane and job-details pane
-//				Users selectedUser = (Users) userTab.getSelectedUser();
-//				if(selectedUser!=null){
-//					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount());
-//				}
-//			}
-//		});
-//		
-//
-//		mainWindow.addComponent(refresher);
-//		refresher.setEnabled(false);
+		
+		final Refresher refresher = new Refresher();
+		refresher.setRefreshInterval(5000);
+		
+		refresher.setHeight("1%");
+		
+		refresher.addListener(new RefreshListener() {
+			
+			public void refresh(Refresher source) {
+				// TODO Auto-generated method stub
+				userTab.refresh();
+				//reload the job pane and job-details pane
+				Users selectedUser = (Users) userTab.getSelectedUser();
+				if(selectedUser!=null){
+					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount());
+				}
+			}
+		});
+		
+
+		mainWindow.addComponent(refresher);
+		refresher.setEnabled(false);
 	}
 
 }
