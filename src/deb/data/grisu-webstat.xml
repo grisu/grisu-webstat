@@ -1,0 +1,8 @@
+<Context
+    docBase="/var/lib/grisu/grisu-webstat.war"
+    unpackWAR="true"
+    reloadable="true"
+    autoDeploy="true"
+    debug="0">
+  </Context>
+  
