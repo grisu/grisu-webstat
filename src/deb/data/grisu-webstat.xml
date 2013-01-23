@@ -1,5 +1,5 @@
 <Context
-    docBase="/var/lib/grisu/grisu-ws.war"
+    docBase="/var/lib/grisu/grisu-webstat.war"
     unpackWAR="true"
     reloadable="true"
     autoDeploy="true"
