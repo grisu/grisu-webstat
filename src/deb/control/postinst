@@ -1,0 +1,76 @@
+#!/bin/sh
+# postinst script for hudson
+#
+# see: dh_installdeb(1)
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+
+case "$1" in
+    configure)
+    
+
+    	/etc/init.d/tomcat6 stop	
+
+
+		# remove deployed webapp from tomcat, just to be sure
+		if [ -d /var/lib/tomcat6/webapps/grisu-webstat ]; then
+			rm -rf /var/lib/tomcat6/webapps/grisu-webstat
+		fi
+		
+		# adjust permissions
+		if [ ! -d /var/lib/grisu/ ]; then
+			mkdir -p /var/lib/grisu/
+		fi
+		chown -R tomcat6:tomcat6 /var/lib/grisu 
+
+
+		
+		# create log dir
+		if [ ! -d /var/log/grisu ]; then
+			mkdir /var/log/grisu
+			chown -R tomcat6:tomcat6 /var/log/grisu
+		fi
+		
+		# extract a few jars into tomcat6/shared so there will be no problem if another webapp uses them as well (only security related jars)
+		# unzip -uoj /var/lib/grisu/grisu-ws.war WEB-INF/lib/bcprov-jdk15-145.jar WEB-INF/lib/cryptix-asn1-1.7.0.jar WEB-INF/lib/cryptix32-1.7.0.jar WEB-INF/lib/puretls-1.7.0.jar WEB-INF/lib/globus-dependencies-0.3.jar  -d /var/lib/tomcat6/shared/
+		# now, remove those jars from war file
+		# zip -d /var/lib/grisu/grisu-ws.war WEB-INF/lib/bcprov-jdk15-145.jar  WEB-INF/lib/cryptix-asn1-1.7.0.jar WEB-INF/lib/cryptix32-1.7.0.jar WEB-INF/lib/puretls-1.7.0.jar WEB-INF/lib/globus-dependencies-0.3.jar
+		
+		#update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
+		#update-alternatives --set javac /usr/lib/jvm/java-6-sun/bin/javac
+		
+
+		#if ! grep ^JAVA_HOME= /etc/default/tomcat6; then
+		#		echo 'JAVA_HOME=/usr/lib/jvm/java-6-sun/' >> /etc/default/tomcat6
+		#fi
+		
+		
+		/etc/init.d/tomcat6 start
+	;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+		
+esac
+
+
+
+
