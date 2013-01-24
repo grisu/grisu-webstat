@@ -4,15 +4,25 @@
  <logger name="grith" level="debug"/>
 
 
+<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/var/log/grisu/grisu-webstat.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>/var/log/grisu/grisu-webstat.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>2</maxHistory>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%-50(%d{HH:mm:ss.SSS} [%level] [%thread]) [%logger{0}] tid=[%X{tid}] csid=[%X{csid}] cmdid=[%X{cmdid}] user=[%X{user}] - %msg%n</pattern>
+    </encoder>
+  </appender> 
 
 
-
- <appender name="STDOUT"
+ <!-- <appender name="STDOUT"
     class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>%-30(%d{HH:mm:ss.SSS} [%level] [%thread]) [%logger{0}] csid=[%X{session}] user=[%X{user}] cmdid=[%X{cmdid}] - %msg%n</pattern>
     </encoder>
- </appender> 
+ </appender>--> 
   
 
   
@@ -26,6 +36,6 @@
 <!--     <appender-ref ref="SYSLOG" />  -->
 <!--     <appender-ref ref="GRAYLOG" />  -->
 <!--     <appender-ref ref="SIFT" />  -->
-   <appender-ref ref="STDOUT" />
+<!--    <appender-ref ref="STDOUT" /> -->
   </root>
 </configuration>
