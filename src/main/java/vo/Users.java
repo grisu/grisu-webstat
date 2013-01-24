@@ -24,11 +24,6 @@ public class Users{
 			usrName=usrName.substring(0, usrName.lastIndexOf(" "));
 		}
 		this.userName=usrName;
-		JobStatDAO jsDao = new JobStatDAO();
-		this.jobCount= ""+jsDao.findJobCount(dn);
-		this.runningJobCount=""+jsDao.findRunningJobCount(dn);
-		this.activeJobCount = ""+jsDao.findActiveJobCount(dn);//+" ("+this.runningJobCount+")";
-		this.pendingJobCount=""+jsDao.findPendingJobCount(dn);
 	}
 
 	public String getUserName() {
