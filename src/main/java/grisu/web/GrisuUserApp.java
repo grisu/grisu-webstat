@@ -60,7 +60,7 @@ public class GrisuUserApp extends Application {
 		VerticalSplitPanel vertiSplitPanel = new VerticalSplitPanel();
 		final JobTable jobTab = new JobTable("Jobs for selected user");
 		vertiSplitPanel.addComponent(jobTab);
-
+		
 		horiSplitPanel.addComponent(vertiSplitPanel);
 		horiSplitPanel.setHeight("100%");
 		horiSplitPanel.getFirstComponent().setSizeFull();
@@ -76,15 +76,20 @@ public class GrisuUserApp extends Application {
 				}
 			}
 		});
+
+		final JobDetailsComponent jobDets = new JobDetailsComponent();
+
+		Panel jobDetPan = new Panel();
+		jobDetPan.setSizeFull();
+		jobDetPan.setContent(jobDets);
+		jobDetPan.setCaption("Job Details");
+		vertiSplitPanel.addComponent(jobDetPan);
 		
-
-		final JobDetComponent jobDets = new JobDetComponent();
-		vertiSplitPanel.addComponent(jobDets);
-
 		jobTab.addListener(new ValueChangeListener() {
 			public void valueChange(ValueChangeEvent event) {
 				// TODO Auto-generated method stub
 				JobStat selectedJob = (JobStat) jobTab.getSelectedJob();
+			//	jobDets.populate(selectedJob);
 				jobDets.populate(selectedJob);
 			}
 		});
@@ -115,7 +120,6 @@ public class GrisuUserApp extends Application {
 			}
 		});
 		
-
 		mainWindow.addComponent(refresher);
 		refresher.setEnabled(false);
 	}

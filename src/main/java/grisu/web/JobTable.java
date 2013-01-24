@@ -110,9 +110,12 @@ public class JobTable extends CustomComponent {
 			
 			public int compare(Object obj1, Object obj2) {
 				// TODO Auto-generated method stub
-				if(obj1 instanceof String && obj2 instanceof String)
+				if(obj1 instanceof String)
 				{
 					return ((String)obj1).toLowerCase().compareTo(((String) obj2).toLowerCase());
+				}
+				else if(obj1 instanceof Boolean){
+					return ((Boolean)obj1).compareTo((Boolean)obj2);
 				}
 				else	
 				{
