@@ -9,6 +9,8 @@ public class Users{
 	private String userName;
 	private String jobCount;
 	private String activeJobCount;
+	private String runningJobCount;
+	private String pendingJobCount;
 
 	public String getDn() {
 		return dn;
@@ -22,9 +24,6 @@ public class Users{
 			usrName=usrName.substring(0, usrName.lastIndexOf(" "));
 		}
 		this.userName=usrName;
-		JobStatDAO jsDao = new JobStatDAO();
-		this.jobCount= ""+jsDao.findJobCount(dn);
-		this.activeJobCount = ""+jsDao.findActiveJobCount(dn);
 	}
 
 	public String getUserName() {
@@ -49,5 +48,21 @@ public class Users{
 	
 	public String getActiveJobCount(){
 		return activeJobCount;
+	}
+
+	public String getRunningJobCount() {
+		return runningJobCount;
+	}
+
+	public void setRunningJobCount(String runningJobCount) {
+		this.runningJobCount = runningJobCount;
+	}
+
+	public String getPendingJobCount() {
+		return pendingJobCount;
+	}
+
+	public void setPendingJobCount(String pendingJobCount) {
+		this.pendingJobCount = pendingJobCount;
 	}
 }
