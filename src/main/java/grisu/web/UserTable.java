@@ -188,14 +188,15 @@ public class UserTable extends CustomComponent {
 						{
 							s1=s1.substring(0,s1.indexOf("(")-1);
 							s2=s2.substring(0,s2.indexOf("(")-1);
-							System.out.println(s1+":"+s2);
+							//System.out.println(s1+":"+s2);
 						}
 						i1=Integer.parseInt(s1);
 						i2=Integer.parseInt(s2);
 						return (i1-i2);
 					}
 					catch(NumberFormatException nfe){
-						System.out.println("nfe "+nfe.getMessage());
+						//System.out.println("nfe "+nfe.getMessage());
+						log.error("NumberFormatException "+nfe.getMessage());
 						return ((String)obj1).toLowerCase().compareTo(((String) obj2).toLowerCase());
 					}
 				}

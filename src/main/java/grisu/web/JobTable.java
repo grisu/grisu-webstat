@@ -84,7 +84,8 @@ public class JobTable extends CustomComponent {
 		JobStatDAO jsDao = new JobStatDAO();
 		List<JobStat> jobs=jsDao.findJobByDN(dn, true);
 		BeanItemContainer<JobStat> jobContainer = new BeanItemContainer<JobStat>(JobStat.class);
-		System.out.println(jobs.size()+"..."+dn);
+//		System.out.println(jobs.size()+"..."+dn);
+		log.debug("No. of jobs: "+jobs.size() +"\ndn: "+dn);
 		
 		jobContainer.addAll(jobs);
 

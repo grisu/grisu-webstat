@@ -2,7 +2,12 @@ package grisu.web;
 
 import grisu.backend.model.job.JobStat;
 import grisu.jcommons.constants.Constants;
+import grisu.jcommons.utils.MemoryUtils;
+import grisu.jcommons.utils.WalltimeUtils;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -50,7 +55,7 @@ public class JobDetailsComponent extends CustomComponent{
 		tblProps.setVisibleColumns(new String[] {"property", "value"});
 		tblProps.setColumnHeaders(new String [] {"Property",  "value"});
 				
-		tblDets.setCaption("Job Details");
+		tblDets.setCaption("Additional job properties");
 		tblProps.setCaption("Job Properties");
 		tblDets.setPageLength(7);
 		tblProps.setPageLength(9);
@@ -66,26 +71,41 @@ public class JobDetailsComponent extends CustomComponent{
 		tblDets.removeAllItems();
 		tblProps.removeAllItems();
 		
+		List<String> jobProperties = new ArrayList<String>();
+		jobProperties.add(Constants.JOBNAME_KEY);
+		jobProperties.add(Constants.COMMANDLINE_KEY);
+		jobProperties.add(Constants.NO_CPUS_KEY);
+		jobProperties.add(Constants.MEMORY_IN_B_KEY);
+		jobProperties.add(Constants.WALLTIME_IN_MINUTES_KEY);
+		jobProperties.add(Constants.SUBMISSIONLOCATION_KEY);
+		jobProperties.add(Constants.SUBMISSION_TIME_KEY);
+		jobProperties.add(Constants.APPLICATIONNAME_KEY);
+		jobProperties.add(Constants.APPLICATIONVERSION_KEY);
+
 		if(job!=null){
-			tblDets.addItem(new Object [] {"Job Name",  job.getJobname()},null);
-			tblDets.addItem(new Object [] {"DN",  job.getDn()}, null);
-			tblDets.addItem(new Object [] {"Group",  job.getFqan()}, null);
-			tblDets.addItem(new Object [] {"Status",  job.getStatus()}, null);
-			tblDets.addItem(new Object [] {"Submission Type",  job.getSubmissionType()}, null);
-			tblDets.addItem(new Object [] {"Active",  job.isActive()}, null);
-			tblDets.addItem(new Object [] {"Batch job",  job.isBatchJob()}, null);
-			
+		
 			Map<String, String> propertyMap = job.getProperties();
 			
-			tblProps.addItem(new Object [] {"Job Name",  propertyMap.get(Constants.JOBNAME_KEY)},null);
-			tblProps.addItem(new Object [] {"Commandline",  propertyMap.get(Constants.COMMANDLINE_KEY)},null);
-			tblProps.addItem(new Object [] {"Number of CPUs",  propertyMap.get(Constants.NO_CPUS_KEY)},null);
-			tblProps.addItem(new Object [] {"Memory in Bytes",  propertyMap.get(Constants.MEMORY_IN_B_KEY)},null);
-			tblProps.addItem(new Object [] {"Walltime in minutes",  propertyMap.get(Constants.WALLTIME_IN_MINUTES_KEY)},null);
-			tblProps.addItem(new Object [] {"Submission location",  propertyMap.get(Constants.SUBMISSIONLOCATION_KEY)},null);
-			tblProps.addItem(new Object [] {"Submission time",  propertyMap.get(Constants.SUBMISSION_TIME_KEY)},null);
-			tblProps.addItem(new Object [] {"Application name",  propertyMap.get(Constants.APPLICATIONNAME_KEY)},null);
-			tblProps.addItem(new Object [] {"Application version",  propertyMap.get(Constants.APPLICATIONVERSION_KEY)},null);
+			String val=null;
+			for(String prop:propertyMap.keySet()){
+				val =  propertyMap.get(prop);
+				if(jobProperties.contains(prop)){
+					if(prop.equalsIgnoreCase(Constants.MEMORY_IN_B_KEY)){
+						val=MemoryUtils.humanReadableByteCount(Long.parseLong(val), false);
+					}
+					if(prop.equalsIgnoreCase(Constants.WALLTIME_IN_MINUTES_KEY)){
+						val=WalltimeUtils.convertSeconds(Integer.parseInt(val)*60);
+					}
+					if(prop.equalsIgnoreCase(Constants.SUBMISSION_TIME_KEY)){
+						Date d = new Date(Long.parseLong(val));
+						val=d.toString();
+					}
+					tblProps.addItem(new Object [] {prop, val},null);
+				}
+				else{
+					tblDets.addItem(new Object [] {prop, val},null);
+				}
+			}
 		}
 		
 		log.debug("Exiting populate()");
