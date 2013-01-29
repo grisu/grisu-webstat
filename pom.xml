@@ -238,7 +238,7 @@
     <dependency>
     	<groupId>grisu.backend</groupId>
     	<artifactId>grisu-core</artifactId>
-    	<version>0.5.15-SNAPSHOT</version>
+    	<version>0.5.16-SNAPSHOT</version>
     </dependency>
     <dependency>
    <groupId>org.vaadin.addons</groupId>
