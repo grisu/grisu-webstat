@@ -57,6 +57,7 @@ public class UserTable extends CustomComponent {
 	public UserTable(String caption) {
 		
 		log.debug("In Constructor");
+		System.out.println("usertab: Inside constructor"+System.currentTimeMillis());
 		
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
@@ -99,6 +100,7 @@ public class UserTable extends CustomComponent {
 		});
 		
 		log.debug("Exiting constructor");
+		System.out.println("usertab: exit constructor"+System.currentTimeMillis());
 	}
 
 	public void addListener(ValueChangeListener valueChangeListener) {
@@ -128,9 +130,12 @@ public class UserTable extends CustomComponent {
 		// TODO Auto-generated method stub
 	
 		log.debug("Entering populate()");
+		System.out.println("usertab: Inside populate"+System.currentTimeMillis());
 		
 		UserDAO userDao = new UserDAO();
+		System.out.println("usertab: Inside populate. getting users"+System.currentTimeMillis());
 		List<User> users = userDao.findAllUsers();
+		System.out.println("usertab: Inside populate. got users"+System.currentTimeMillis());
 		//List<Users> userList = new LinkedList<Users>();
 		
 		userList = new LinkedList<Users>();
@@ -139,6 +144,7 @@ public class UserTable extends CustomComponent {
 		Users temp = null;
 		int jobCount = 0;
 		String dn=null;
+		System.out.println("usertab: Inside populate. looping over userlist"+System.currentTimeMillis());
 		for(User user:users){
 			dn = user.getDn();
 			JobStatDAO jsDao = new JobStatDAO();
@@ -159,6 +165,7 @@ public class UserTable extends CustomComponent {
 				hiddenUserList.add(temp);
 			}
 		}
+		System.out.println("usertab: Inside populate. loop ends"+System.currentTimeMillis());
 		
 		userContainer = new BeanItemContainer<Users>(Users.class);
 
@@ -208,6 +215,7 @@ public class UserTable extends CustomComponent {
 		}));
 		
 		log.info("Exiting populate()");
+		System.out.println("usertab: exit populate"+System.currentTimeMillis());
 	}
 
 	//on auto-refresh

@@ -67,6 +67,7 @@ public class JobTable extends CustomComponent {
 	public JobTable() {
 		
 		log.debug("Inside constructor");
+		System.out.println("jobtab: Inside constructor"+System.currentTimeMillis());
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 
@@ -81,6 +82,7 @@ public class JobTable extends CustomComponent {
 //		mainLayout.setCaption(caption);
 		//mainLayout.getContent().setSizeFull();
 		log.debug("Exiting constructor");
+		System.out.println("jobtab: exit constructor"+System.currentTimeMillis());
 	}
 
 	
@@ -112,9 +114,12 @@ public class JobTable extends CustomComponent {
 	public void populate(String dn, String active, String running) {
 		// TODO Auto-generated method stub
 		log.debug("Inside populate");
+		System.out.println("jobtab: Inside populate"+System.currentTimeMillis());
 		
 		JobStatDAO jsDao = new JobStatDAO();
 		List<JobStat> jobs=jsDao.findJobByDN(dn, true);
+		System.out.println("jobtab: Inside populate. jobs rcvd"+System.currentTimeMillis());
+		
 		BeanItemContainer<JobStat> jobContainer = new BeanItemContainer<JobStat>(JobStat.class);
 		BeanItemContainer<JobStat> inactiveJobContainer = new BeanItemContainer<JobStat>(JobStat.class);
 		
@@ -216,6 +221,8 @@ public class JobTable extends CustomComponent {
 		}));
 		
 		log.debug("Exiting populate");
+		System.out.println("Exiting populate");
+		System.out.println("jobtab: exit populate"+System.currentTimeMillis());
 	}
 
 	public Object getSelectedJob() {

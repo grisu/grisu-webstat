@@ -2,6 +2,9 @@ package grisu.web;
 
 import listeners.CustomValueChangeListener;
 import grisu.backend.model.job.JobStat;
+import grisu.settings.ServerPropertiesManager;
+//import grisu.settings.ServerPropertiesManager;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,8 @@ public class GrisuUserApp extends Application {
 	public void init() {
 
 		log.debug("Entered init()");
+		System.out.println("Entered init()");
+		
 		Window mainWindow = new Window("Grisu");
 
 		final Table t2 = new Table("Job Table");
@@ -105,13 +110,17 @@ public class GrisuUserApp extends Application {
 		userTab.populate();
 		
 		final Refresher refresher = new Refresher();
-		refresher.setRefreshInterval(5000);
+		refresher.setRefreshInterval(ServerPropertiesManager.getDatabaseRefresh());
+	//	refresher.setRefreshInterval(30000);
 		
 		refresher.setHeight("1%");
 		
 		refresher.addListener(new RefreshListener() {
 			
 			public void refresh(Refresher source) {
+				
+				refresher.setEnabled(false);
+				System.out.println("refresh starts "+System.currentTimeMillis());
 				// TODO Auto-generated method stub
 				userTab.refresh();
 				//reload the job pane and job-details pane
@@ -119,13 +128,17 @@ public class GrisuUserApp extends Application {
 				if(selectedUser!=null){
 					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
 				}
+				refresher.setEnabled(true);
+				System.out.println("refresh ends "+System.currentTimeMillis());
 			}
 		});
 		
+		
 		mainWindow.addComponent(refresher);
-		refresher.setEnabled(false);
+	//	refresher.setEnabled(false);
 		
 		log.debug("Exiting init()");
+		System.out.println("Exiting init()");
 	}
 
 }
