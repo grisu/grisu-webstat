@@ -108,6 +108,10 @@ public class JobDetailsComponent extends CustomComponent{
 			}
 		}
 		
+		tblDets.setSortContainerPropertyId("property");
+		tblDets.setSortAscending(true);
+		tblDets.sort();
+		
 		log.debug("Exiting populate()");
 	}
 
