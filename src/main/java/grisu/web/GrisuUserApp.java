@@ -1,5 +1,6 @@
 package grisu.web;
 
+import listeners.CustomValueChangeListener;
 import grisu.backend.model.job.JobStat;
 
 import org.slf4j.Logger;
@@ -18,7 +19,6 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.Window;
-//import com.vaadin.data.Property.ValueChangeEvent;
 
 
 public class GrisuUserApp extends Application {
@@ -48,8 +48,15 @@ public class GrisuUserApp extends Application {
 		layout.setExpandRatio(horiSplitPanel, 1.0f);
 
 		VerticalSplitPanel vertiSplitPanel = new VerticalSplitPanel();
-		final JobTable jobTab = new JobTable("Jobs for selected user");
+
+		final JobTable jobTab = new JobTable();
 		vertiSplitPanel.addComponent(jobTab);
+		final Panel jobTabPan = new Panel();
+		jobTabPan.setSizeFull();
+		jobTabPan.addComponent(jobTab);
+		jobTabPan.setCaption("Jobs for selected user");
+		vertiSplitPanel.addComponent(jobTabPan);
+
 		
 		horiSplitPanel.addComponent(vertiSplitPanel);
 		horiSplitPanel.setHeight("100%");
@@ -62,7 +69,8 @@ public class GrisuUserApp extends Application {
 				// TODO Auto-generated method stub
 				Users selectedUser = (Users) userTab.getSelectedUser();
 				if(selectedUser!=null){
-					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount());
+					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
+					jobTabPan.setCaption("Jobs for "+selectedUser.getUserName());
 				}
 			}
 		});
@@ -75,11 +83,15 @@ public class GrisuUserApp extends Application {
 		jobDetPan.setCaption("Job Details");
 		vertiSplitPanel.addComponent(jobDetPan);
 		
-		jobTab.addListener(new ValueChangeListener() {
+		jobTab.addListener(new CustomValueChangeListener()  {
 			public void valueChange(ValueChangeEvent event) {
 				// TODO Auto-generated method stub
 				JobStat selectedJob = (JobStat) jobTab.getSelectedJob();
-			//	jobDets.populate(selectedJob);
+				jobDets.populate(selectedJob);
+			}
+
+			public void fireValueChange() {
+				JobStat selectedJob = (JobStat) jobTab.getSelectedJob();
 				jobDets.populate(selectedJob);
 			}
 		});
@@ -105,7 +117,7 @@ public class GrisuUserApp extends Application {
 				//reload the job pane and job-details pane
 				Users selectedUser = (Users) userTab.getSelectedUser();
 				if(selectedUser!=null){
-					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount());
+					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
 				}
 			}
 		});
