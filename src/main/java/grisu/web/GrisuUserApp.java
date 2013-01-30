@@ -113,22 +113,40 @@ public class GrisuUserApp extends Application {
 		refresher.setRefreshInterval(ServerPropertiesManager.getDatabaseRefresh());
 	//	refresher.setRefreshInterval(30000);
 		
+		
 		refresher.setHeight("1%");
 		
 		refresher.addListener(new RefreshListener() {
 			
 			public void refresh(Refresher source) {
 				
-				refresher.setEnabled(false);
+//				refresher.setEnabled(false);
 				System.out.println("refresh starts "+System.currentTimeMillis());
 				// TODO Auto-generated method stub
-				userTab.refresh();
+				
+				Thread refresherThread = new Thread(){
+					
+					public void run(){
+						refresher.setEnabled(false);
+						System.out.println("refresh starts "+System.currentTimeMillis());
+						System.out.println(refresher.isEnabled());
+						userTab.refresh();
+						
+						System.out.println("refresh ends "+System.currentTimeMillis());
+						refresher.setEnabled(true);
+					}
+				};
+				refresherThread.start();
+				
+				//userTab.refresh();
 				//reload the job pane and job-details pane
+/*new
 				Users selectedUser = (Users) userTab.getSelectedUser();
 				if(selectedUser!=null){
 					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
 				}
 				refresher.setEnabled(true);
+**/				
 				System.out.println("refresh ends "+System.currentTimeMillis());
 			}
 		});

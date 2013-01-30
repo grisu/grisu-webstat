@@ -135,6 +135,9 @@ public class UserTable extends CustomComponent {
 		UserDAO userDao = new UserDAO();
 		System.out.println("usertab: Inside populate. getting users"+System.currentTimeMillis());
 		List<User> users = userDao.findAllUsers();
+		
+		//List<String> userDNs=userDao.findAllUserDNs();
+		
 		System.out.println("usertab: Inside populate. got users"+System.currentTimeMillis());
 		//List<Users> userList = new LinkedList<Users>();
 		
@@ -165,6 +168,50 @@ public class UserTable extends CustomComponent {
 				hiddenUserList.add(temp);
 			}
 		}
+
+//		for(String dn:userDNs){
+//			//dn = userDN;
+//			JobStatDAO jsDao = new JobStatDAO();
+//			jobCount=jsDao.findJobCount(dn);
+//			
+//			temp= new Users();
+//			temp.setDn(dn);
+////			temp.setJobCount(""+jobCount);
+////			temp.setRunningJobCount(""+jsDao.findRunningJobCount(dn));
+////			temp.setActiveJobCount(""+jsDao.findActiveJobCount(dn));//+" ("+this.runningJobCount+")";
+////			temp.setPendingJobCount(""+jsDao.findPendingJobCount(dn));
+//			
+//			if(jobCount>0){
+//				userList.add(temp);
+//			}
+//			else
+//			{
+//				hiddenUserList.add(temp);
+//			}
+//		}
+
+		
+		Thread jobCountUpdater = new Thread(){
+			public void run() {
+				System.out.println("jobCountUpdater starts");
+				JobStatDAO jsDao = new JobStatDAO();
+				Item tblItem=null;
+				String dn=null;
+				int running;
+				for(Object id:tblUser.getItemIds())
+				{
+					tblItem=tblUser.getItem(id);
+					dn=(String) tblItem.getItemProperty("dn").getValue();
+					running = jsDao.findRunningJobCount(dn);
+					tblItem.getItemProperty("jobCount").setValue(""+jsDao.findJobCount(dn));
+					tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
+					tblItem.getItemProperty("runningJobCount").setValue(""+running);
+				}
+				
+				System.out.println("jobCountUpdater ends");
+			}
+		};
+		
 		System.out.println("usertab: Inside populate. loop ends"+System.currentTimeMillis());
 		
 		userContainer = new BeanItemContainer<Users>(Users.class);
@@ -214,6 +261,8 @@ public class UserTable extends CustomComponent {
 			}
 		}));
 		
+		jobCountUpdater.start();
+		
 		log.info("Exiting populate()");
 		System.out.println("usertab: exit populate"+System.currentTimeMillis());
 	}
@@ -222,6 +271,29 @@ public class UserTable extends CustomComponent {
 	public void refresh() {
 		// TODO Auto-generated method stub
 
+//		Thread refresherThread = new Thread(){
+//			public void run()
+//			{
+//				JobStatDAO jsDao = new JobStatDAO();
+//				
+//				Item tblItem=null;
+//				String dn=null;
+//				int running;
+//				for(Object id:tblUser.getItemIds())
+//				{
+//					tblItem=tblUser.getItem(id);
+//					dn=(String) tblItem.getItemProperty("dn").getValue();
+//					running = jsDao.findRunningJobCount(dn);
+//					tblItem.getItemProperty("jobCount").setValue(""+jsDao.findJobCount(dn));
+//					tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
+//					tblItem.getItemProperty("runningJobCount").setValue(""+running);
+//				}				
+//			}
+//		};
+//		
+//		refresherThread.start();
+		
+		System.out.println("inside refresh");
 		JobStatDAO jsDao = new JobStatDAO();
 		
 		Item tblItem=null;
@@ -236,6 +308,7 @@ public class UserTable extends CustomComponent {
 			tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
 			tblItem.getItemProperty("runningJobCount").setValue(""+running);
 		}
+		System.out.println("exiting refresh");
 	}	
 	
 	

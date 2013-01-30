@@ -140,31 +140,74 @@ public class JobTable extends CustomComponent {
 	//	tblJobsInactive.setPageLength(inactiveJobContainer.size());
 		
 
-		Item tblItem=null;
-		String client="";
-		Set<String> clientSet = new HashSet<String>(); 
-		
-		for(Object id:tblJobs.getItemIds())
-		{
-			tblItem=tblJobs.getItem(id);
-			int status  = (Integer) tblItem.getItemProperty("status").getValue();
-			tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
-			Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
-			tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
-			
-			clientSet.add(app.get("client"));
-		}
-		
-		for(Object id:tblJobsInactive.getItemIds())
-		{
-			tblItem=tblJobsInactive.getItem(id);
-			int status  = (Integer) tblItem.getItemProperty("status").getValue();
-			tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
-			Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
-			tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
+		Thread jobTableUpdater = new Thread(){
+			public void run(){
+				System.out.println("jobtableupdater starts");
+				Item tblItem=null;
+				String client="";
+				Set<String> clientSet = new HashSet<String>(); 
+				
+				for(Object id:tblJobs.getItemIds())
+				{
+					tblItem=tblJobs.getItem(id);
+					int status  = (Integer) tblItem.getItemProperty("status").getValue();
+					tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
+					Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
+					tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
+					
+					clientSet.add(app.get("client"));
+				}
+				
+				for(Object id:tblJobsInactive.getItemIds())
+				{
+					tblItem=tblJobsInactive.getItem(id);
+					int status  = (Integer) tblItem.getItemProperty("status").getValue();
+					tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
+					Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
+					tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
 
-			clientSet.add(app.get("client"));
-		}
+					clientSet.add(app.get("client"));
+				}
+				for(String cli:clientSet){
+					if(cli!=null)
+						client+=cli+", ";
+				}
+				if(client.length()>0){
+					lblClient.setVisible(true);
+					lblClient.setValue("Client(s): "+client.substring(0, client.length()-2));
+				}
+				else
+				{
+					lblClient.setVisible(false);
+				}
+				System.out.println("jobtableupdater ends");
+			}
+		};
+//		Item tblItem=null;
+//		String client="";
+//		Set<String> clientSet = new HashSet<String>(); 
+//		
+//		for(Object id:tblJobs.getItemIds())
+//		{
+//			tblItem=tblJobs.getItem(id);
+//			int status  = (Integer) tblItem.getItemProperty("status").getValue();
+//			tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
+//			Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
+//			tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
+//			
+//			clientSet.add(app.get("client"));
+//		}
+//		
+//		for(Object id:tblJobsInactive.getItemIds())
+//		{
+//			tblItem=tblJobsInactive.getItem(id);
+//			int status  = (Integer) tblItem.getItemProperty("status").getValue();
+//			tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
+//			Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
+//			tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
+//
+//			clientSet.add(app.get("client"));
+//		}
 
 		tblJobs.setVisibleColumns(new Object [] {"jobname","active", "submissionType", "fqan", "submittedJobDescription"});
 		tblJobs.setColumnHeaders(new String [] {"Job Name","Active", "Status", "Group", "Application key"});
@@ -179,18 +222,18 @@ public class JobTable extends CustomComponent {
 		lblTotJobs.setValue("Total Jobs: "+totSize +"(Active: "+active+", Running: "+running+")");
 		lblDn.setValue("DN: "+dn);
 		
-		for(String cli:clientSet){
-			if(cli!=null)
-				client+=cli+", ";
-		}
-		if(client.length()>0){
-			lblClient.setVisible(true);
-			lblClient.setValue("Client(s): "+client.substring(0, client.length()-2));
-		}
-		else
-		{
-			lblClient.setVisible(false);
-		}
+//		for(String cli:clientSet){
+//			if(cli!=null)
+//				client+=cli+", ";
+//		}
+//		if(client.length()>0){
+//			lblClient.setVisible(true);
+//			lblClient.setValue("Client(s): "+client.substring(0, client.length()-2));
+//		}
+//		else
+//		{
+//			lblClient.setVisible(false);
+//		}
 		
 		//Custom sorter (as the default sorting doesn't work properly for the columns with generated values)
 		jobContainer.setItemSorter(new DefaultItemSorter(new Comparator<Object>() {
@@ -219,6 +262,9 @@ public class JobTable extends CustomComponent {
 					return ((Integer)obj1-(Integer)obj2);
 			}
 		}));
+		
+		
+		jobTableUpdater.start();
 		
 		log.debug("Exiting populate");
 		System.out.println("Exiting populate");
