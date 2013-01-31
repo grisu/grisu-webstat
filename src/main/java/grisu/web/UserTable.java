@@ -41,7 +41,7 @@ public class UserTable extends CustomComponent {
 
 
 	private List<Users> userList;
-	private List<Users> hiddenUserList;
+	////private List<Users> hiddenUserList;
 	BeanItemContainer<Users> userContainer;
 
 
@@ -79,7 +79,8 @@ public class UserTable extends CustomComponent {
 			public void buttonClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				if(btnToggle.getCaption().contains("Show")){
-					userContainer.addAll(hiddenUserList);
+					////		userContainer.addAll(hiddenUserList);
+					userContainer.addAll(userList);
 					btnToggle.setCaption("hide users with no jobs");
 					if(userContainer.size()<30)
 						tblUser.setPageLength(userContainer.size());
@@ -143,7 +144,7 @@ public class UserTable extends CustomComponent {
 		//List<Users> userList = new LinkedList<Users>();
 		
 		userList = new LinkedList<Users>();
-		hiddenUserList = new LinkedList<Users>();
+		////hiddenUserList = new LinkedList<Users>();
 		
 		Users temp = null;
 		int jobCount = 0;
@@ -171,14 +172,16 @@ public class UserTable extends CustomComponent {
 			}
 		}
 **/
+		
+		System.out.println(userDNs.size());
 		long time1, time2;
 		for(String dn:userDNs){
-			System.out.println("inside loop");
+		//	System.out.println("inside loop");
 			time1=System.currentTimeMillis();
 			temp= new Users();
 			
 			time2=System.currentTimeMillis();
-			System.out.println("created Users(): "+(time2-time1));
+		//	System.out.println("created Users(): "+(time2-time1));
 			temp.setDn(dn);
 //			jobCount=jsDao.findJobCount(dn);
 //			temp.setJobCount(""+jobCount);
@@ -188,16 +191,16 @@ public class UserTable extends CustomComponent {
 					
 			//if(jobCount>0){
 			time1=System.currentTimeMillis();
-			System.out.println("b4 calling isJobPresent: "+(time1-time2));
-			if(jsDao.isJobPresent(dn)){
+	//		System.out.println("b4 calling isJobPresent: "+(time1-time2));
+//			if(jsDao.isJobPresent(dn)){
 				userList.add(temp);
-			}
-			else
-			{
-				hiddenUserList.add(temp);
-			}
-			time2=System.currentTimeMillis();
-			System.out.println("exit loop iter: "+(time2-time1));
+//			}
+//			else
+//			{
+//				hiddenUserList.add(temp);
+//			}
+//			time2=System.currentTimeMillis();
+	//		System.out.println("exit loop iter: "+(time2-time1));
 		}
 
 		
