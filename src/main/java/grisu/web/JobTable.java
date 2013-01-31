@@ -15,6 +15,7 @@ import java.util.Set;
 
 import listeners.CustomValueChangeListener;
 
+import org.apache.naming.java.javaURLContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,13 +140,15 @@ public class JobTable extends CustomComponent {
 		tblJobsInactive.setContainerDataSource(inactiveJobContainer);
 	//	tblJobsInactive.setPageLength(inactiveJobContainer.size());
 		
+		final Set<String> clientSet = new HashSet<String>(); 
+		
 
 		Thread jobTableUpdater = new Thread(){
 			public void run(){
 				System.out.println("jobtableupdater starts");
 				Item tblItem=null;
 				String client="";
-				Set<String> clientSet = new HashSet<String>(); 
+//				Set<String> clientSet = new HashSet<String>(); 
 				
 				for(Object id:tblJobs.getItemIds())
 				{

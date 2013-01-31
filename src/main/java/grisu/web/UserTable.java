@@ -8,6 +8,7 @@ import grisu.backend.model.job.JobStat;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,9 +135,9 @@ public class UserTable extends CustomComponent {
 		
 		UserDAO userDao = new UserDAO();
 		System.out.println("usertab: Inside populate. getting users"+System.currentTimeMillis());
-		List<User> users = userDao.findAllUsers();
+//		List<User> users = userDao.findAllUsers();
 		
-		//List<String> userDNs=userDao.findAllUserDNs();
+		List<String> userDNs=userDao.findAllUserDNs();
 		
 		System.out.println("usertab: Inside populate. got users"+System.currentTimeMillis());
 		//List<Users> userList = new LinkedList<Users>();
@@ -146,22 +147,22 @@ public class UserTable extends CustomComponent {
 		
 		Users temp = null;
 		int jobCount = 0;
-		String dn=null;
+//		String dn=null;
 		System.out.println("usertab: Inside populate. looping over userlist"+System.currentTimeMillis());
-		for(User user:users){
+		JobStatDAO jsDao = new JobStatDAO();
+/**		for(User user:users){
 			dn = user.getDn();
-			JobStatDAO jsDao = new JobStatDAO();
-
-			
 			temp= new Users();
 			temp.setDn(dn);
-			jobCount=jsDao.findJobCount(dn);
-			temp.setJobCount(""+jobCount);
+//			jobCount=jsDao.findJobCount(dn);
+//			temp.setJobCount(""+jobCount);
 //			temp.setRunningJobCount(""+jsDao.findRunningJobCount(dn));
 //			temp.setActiveJobCount(""+jsDao.findActiveJobCount(dn));//+" ("+this.runningJobCount+")";
 //			temp.setPendingJobCount(""+jsDao.findPendingJobCount(dn));
-			
-			if(jobCount>0){
+
+					
+			//if(jobCount>0){
+			if(jsDao.isJobPresent(dn)){
 				userList.add(temp);
 			}
 			else
@@ -169,27 +170,25 @@ public class UserTable extends CustomComponent {
 				hiddenUserList.add(temp);
 			}
 		}
-
-//		for(String dn:userDNs){
-//			//dn = userDN;
-//			JobStatDAO jsDao = new JobStatDAO();
+**/
+		for(String dn:userDNs){
+			temp= new Users();
+			temp.setDn(dn);
 //			jobCount=jsDao.findJobCount(dn);
-//			
-//			temp= new Users();
-//			temp.setDn(dn);
-////			temp.setJobCount(""+jobCount);
-////			temp.setRunningJobCount(""+jsDao.findRunningJobCount(dn));
-////			temp.setActiveJobCount(""+jsDao.findActiveJobCount(dn));//+" ("+this.runningJobCount+")";
-////			temp.setPendingJobCount(""+jsDao.findPendingJobCount(dn));
-//			
-//			if(jobCount>0){
-//				userList.add(temp);
-//			}
-//			else
-//			{
-//				hiddenUserList.add(temp);
-//			}
-//		}
+//			temp.setJobCount(""+jobCount);
+//			temp.setRunningJobCount(""+jsDao.findRunningJobCount(dn));
+//			temp.setActiveJobCount(""+jsDao.findActiveJobCount(dn));//+" ("+this.runningJobCount+")";
+//			temp.setPendingJobCount(""+jsDao.findPendingJobCount(dn));
+					
+			//if(jobCount>0){
+			if(jsDao.isJobPresent(dn)){
+				userList.add(temp);
+			}
+			else
+			{
+				hiddenUserList.add(temp);
+			}
+		}
 
 		
 		Thread jobCountUpdater = new Thread(){
@@ -208,7 +207,7 @@ public class UserTable extends CustomComponent {
 					tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
 					tblItem.getItemProperty("runningJobCount").setValue(""+running);
 				}
-				
+				tblUser.requestRepaint();
 				System.out.println("jobCountUpdater ends");
 			}
 		};
@@ -297,6 +296,8 @@ public class UserTable extends CustomComponent {
 		System.out.println("inside refresh");
 		JobStatDAO jsDao = new JobStatDAO();
 		
+	//	CopyOnWriteArrayList<Object> idList=tblUser.getItemIds();
+		
 		Item tblItem=null;
 		String dn=null;
 		int running;
@@ -305,9 +306,12 @@ public class UserTable extends CustomComponent {
 			tblItem=tblUser.getItem(id);
 			dn=(String) tblItem.getItemProperty("dn").getValue();
 			running = jsDao.findRunningJobCount(dn);
-			tblItem.getItemProperty("jobCount").setValue(""+jsDao.findJobCount(dn));
-			tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
-			tblItem.getItemProperty("runningJobCount").setValue(""+running);
+//			synchronized (tblItem) {
+				tblItem.getItemProperty("jobCount").setValue(""+jsDao.findJobCount(dn));
+				tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
+				tblItem.getItemProperty("runningJobCount").setValue(""+running);
+				
+//			}
 		}
 		System.out.println("exiting refresh");
 	}	
