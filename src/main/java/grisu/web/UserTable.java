@@ -151,14 +151,15 @@ public class UserTable extends CustomComponent {
 		for(User user:users){
 			dn = user.getDn();
 			JobStatDAO jsDao = new JobStatDAO();
-			jobCount=jsDao.findJobCount(dn);
+
 			
 			temp= new Users();
 			temp.setDn(dn);
+			jobCount=jsDao.findJobCount(dn);
 			temp.setJobCount(""+jobCount);
-			temp.setRunningJobCount(""+jsDao.findRunningJobCount(dn));
-			temp.setActiveJobCount(""+jsDao.findActiveJobCount(dn));//+" ("+this.runningJobCount+")";
-			temp.setPendingJobCount(""+jsDao.findPendingJobCount(dn));
+//			temp.setRunningJobCount(""+jsDao.findRunningJobCount(dn));
+//			temp.setActiveJobCount(""+jsDao.findActiveJobCount(dn));//+" ("+this.runningJobCount+")";
+//			temp.setPendingJobCount(""+jsDao.findPendingJobCount(dn));
 			
 			if(jobCount>0){
 				userList.add(temp);
