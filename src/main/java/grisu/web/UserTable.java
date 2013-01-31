@@ -5,6 +5,7 @@ import grisu.backend.hibernate.UserDAO;
 import grisu.backend.model.User;
 import grisu.backend.model.job.JobStat;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -177,10 +178,10 @@ public class UserTable extends CustomComponent {
 		long time1, time2;
 		for(String dn:userDNs){
 		//	System.out.println("inside loop");
-			time1=System.currentTimeMillis();
+//			time1=System.currentTimeMillis();
 			temp= new Users();
 			
-			time2=System.currentTimeMillis();
+//			time2=System.currentTimeMillis();
 		//	System.out.println("created Users(): "+(time2-time1));
 			temp.setDn(dn);
 //			jobCount=jsDao.findJobCount(dn);
@@ -190,7 +191,7 @@ public class UserTable extends CustomComponent {
 //			temp.setPendingJobCount(""+jsDao.findPendingJobCount(dn));
 					
 			//if(jobCount>0){
-			time1=System.currentTimeMillis();
+//			time1=System.currentTimeMillis();
 	//		System.out.println("b4 calling isJobPresent: "+(time1-time2));
 //			if(jsDao.isJobPresent(dn)){
 				userList.add(temp);
@@ -211,16 +212,34 @@ public class UserTable extends CustomComponent {
 				Item tblItem=null;
 				String dn=null;
 				int running;
+				int totJobCount;
+				List<Object> itemIds = new ArrayList<Object>();
 				for(Object id:tblUser.getItemIds())
 				{
 					tblItem=tblUser.getItem(id);
 					dn=(String) tblItem.getItemProperty("dn").getValue();
-					running = jsDao.findRunningJobCount(dn);
-					tblItem.getItemProperty("jobCount").setValue(""+jsDao.findJobCount(dn));
-					tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
-					tblItem.getItemProperty("runningJobCount").setValue(""+running);
+					totJobCount=jsDao.findJobCount(dn);
+					if(totJobCount>0){
+						running = jsDao.findRunningJobCount(dn);
+						tblItem.getItemProperty("jobCount").setValue(""+totJobCount);
+						tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
+						tblItem.getItemProperty("runningJobCount").setValue(""+running);							
+					}
+					else{
+
+//						tblItem.getItemProperty("jobCount").setValue("0");
+//						tblItem.getItemProperty("pendingJobCount").setValue("0");
+//						tblItem.getItemProperty("runningJobCount").setValue("0");
+						itemIds.add(id);
+					}
 				}
-				tblUser.requestRepaint();
+				
+				for(Object itemId: itemIds){
+					userContainer.removeItem(itemId);
+				}
+				//tblUser.requestRepaint();
+				tblUser.refreshRowCache();
+				tblUser.select(tblUser.firstItemId());
 				System.out.println("jobCountUpdater ends");
 			}
 		};

@@ -67,7 +67,7 @@ public class GrisuUserApp extends Application {
 		horiSplitPanel.setHeight("100%");
 		horiSplitPanel.getFirstComponent().setSizeFull();
 		
-		horiSplitPanel.setSplitPosition(30);
+		horiSplitPanel.setSplitPosition(50);
 
 		userTab.addListener(new ValueChangeListener() {
 			public void valueChange(ValueChangeEvent event) {
