@@ -240,6 +240,7 @@ public class UserTable extends CustomComponent {
 				//tblUser.requestRepaint();
 				tblUser.refreshRowCache();
 				tblUser.requestRepaint();
+				tblUser.refreshCurrentPage();
 			//	tblUser.select(tblUser.firstItemId());
 				System.out.println("jobCountUpdater ends");
 			}

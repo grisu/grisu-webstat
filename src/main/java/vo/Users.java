@@ -7,10 +7,10 @@ public class Users{
 
 	private String dn;
 	private String userName;
-	private String jobCount;
-	private String activeJobCount;
-	private String runningJobCount;
-	private String pendingJobCount;
+	private String jobCount="0";
+	private String activeJobCount="0";
+	private String runningJobCount="0";
+	private String pendingJobCount="0";
 
 	public String getDn() {
 		return dn;
