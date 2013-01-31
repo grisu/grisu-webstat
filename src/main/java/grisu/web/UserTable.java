@@ -171,8 +171,14 @@ public class UserTable extends CustomComponent {
 			}
 		}
 **/
+		long time1, time2;
 		for(String dn:userDNs){
+			System.out.println("inside loop");
+			time1=System.currentTimeMillis();
 			temp= new Users();
+			
+			time2=System.currentTimeMillis();
+			System.out.println("created Users(): "+(time2-time1));
 			temp.setDn(dn);
 //			jobCount=jsDao.findJobCount(dn);
 //			temp.setJobCount(""+jobCount);
@@ -181,6 +187,8 @@ public class UserTable extends CustomComponent {
 //			temp.setPendingJobCount(""+jsDao.findPendingJobCount(dn));
 					
 			//if(jobCount>0){
+			time1=System.currentTimeMillis();
+			System.out.println("b4 calling isJobPresent: "+(time1-time2));
 			if(jsDao.isJobPresent(dn)){
 				userList.add(temp);
 			}
@@ -188,6 +196,8 @@ public class UserTable extends CustomComponent {
 			{
 				hiddenUserList.add(temp);
 			}
+			time2=System.currentTimeMillis();
+			System.out.println("exit loop iter: "+(time2-time1));
 		}
 
 		
