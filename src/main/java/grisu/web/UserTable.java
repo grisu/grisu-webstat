@@ -227,19 +227,20 @@ public class UserTable extends CustomComponent {
 					}
 					else{
 
-//						tblItem.getItemProperty("jobCount").setValue("0");
-//						tblItem.getItemProperty("pendingJobCount").setValue("0");
-//						tblItem.getItemProperty("runningJobCount").setValue("0");
-						itemIds.add(id);
+						tblItem.getItemProperty("jobCount").setValue("0");
+						tblItem.getItemProperty("pendingJobCount").setValue("0");
+						tblItem.getItemProperty("runningJobCount").setValue("0");
+						//itemIds.add(id);
 					}
 				}
 				
-				for(Object itemId: itemIds){
-					userContainer.removeItem(itemId);
-				}
+//				for(Object itemId: itemIds){
+//					userContainer.removeItem(itemId);
+//				}
 				//tblUser.requestRepaint();
 				tblUser.refreshRowCache();
-				tblUser.select(tblUser.firstItemId());
+				tblUser.requestRepaint();
+			//	tblUser.select(tblUser.firstItemId());
 				System.out.println("jobCountUpdater ends");
 			}
 		};
