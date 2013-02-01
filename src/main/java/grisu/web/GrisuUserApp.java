@@ -16,12 +16,14 @@ import com.github.wolfie.refresher.Refresher.RefreshListener;
 import com.vaadin.Application;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Button.ClickEvent;
 
 
 public class GrisuUserApp extends Application {
@@ -55,8 +57,26 @@ public class GrisuUserApp extends Application {
 		VerticalSplitPanel vertiSplitPanel = new VerticalSplitPanel();
 
 		final JobTable jobTab = new JobTable();
-		vertiSplitPanel.addComponent(jobTab);
+		//vertiSplitPanel.addComponent(jobTab);
 		final Panel jobTabPan = new Panel();
+		
+		Button btnJobRefresh = new Button();
+		btnJobRefresh.setCaption("Refresh");
+		btnJobRefresh.addListener(new Button.ClickListener() {
+			
+			public void buttonClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				
+				Users selectedUser = (Users) userTab.getSelectedUser();
+				if(selectedUser!=null){
+					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
+					jobTabPan.setCaption("Jobs for "+selectedUser.getUserName());
+				}
+			}
+		});
+		
+		jobTabPan.addComponent(btnJobRefresh);
+		//btnJobRefresh.
 		jobTabPan.setSizeFull();
 		jobTabPan.addComponent(jobTab);
 		jobTabPan.setCaption("Jobs for selected user");
@@ -110,6 +130,7 @@ public class GrisuUserApp extends Application {
 		userTab.populate();
 		
 		final Refresher refresher = new Refresher();
+		refresher.setEnabled(false);
 		refresher.setRefreshInterval(ServerPropertiesManager.getDatabaseRefresh());
 	//	refresher.setRefreshInterval(30000);
 		
@@ -121,7 +142,7 @@ public class GrisuUserApp extends Application {
 			public void refresh(Refresher source) {
 				
 //				refresher.setEnabled(false);
-				System.out.println("refresh starts "+System.currentTimeMillis());
+		//		System.out.println("refresh starts "+System.currentTimeMillis());
 				// TODO Auto-generated method stub
 				
 				Thread refresherThread = new Thread(){
@@ -132,6 +153,10 @@ public class GrisuUserApp extends Application {
 						System.out.println(refresher.isEnabled());
 						userTab.refresh();
 						
+//						Users selectedUser = (Users) userTab.getSelectedUser();
+//						if(selectedUser!=null){
+//							jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
+//						}						
 						System.out.println("refresh ends "+System.currentTimeMillis());
 						refresher.setEnabled(true);
 					}
@@ -147,13 +172,14 @@ public class GrisuUserApp extends Application {
 				}
 				refresher.setEnabled(true);
 **/				
-				System.out.println("refresh ends "+System.currentTimeMillis());
+			//	System.out.println("refresh ends "+System.currentTimeMillis());
 			}
 		});
 		
 		
 		mainWindow.addComponent(refresher);
 	//	refresher.setEnabled(false);
+		refresher.setEnabled(true);
 		
 		log.debug("Exiting init()");
 		System.out.println("Exiting init()");
