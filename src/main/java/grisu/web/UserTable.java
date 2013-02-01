@@ -139,7 +139,9 @@ public class UserTable extends CustomComponent {
 		System.out.println("usertab: Inside populate. getting users"+System.currentTimeMillis());
 //		List<User> users = userDao.findAllUsers();
 		
-		List<String> userDNs=userDao.findAllUserDNs();
+	//	List<String> userDNs=userDao.findAllUserDNs();
+		
+		List<String> userDNs=userDao.findUserDNsFromJobStat();
 		
 		System.out.println("usertab: Inside populate. got users"+System.currentTimeMillis());
 		//List<Users> userList = new LinkedList<Users>();
@@ -252,6 +254,9 @@ public class UserTable extends CustomComponent {
 
 		userContainer.addAll(userList);
 		tblUser.setContainerDataSource(userContainer);
+		
+		jobCountUpdater.start();
+		
 		tblUser.setVisibleColumns(new Object [] {"userName", "pendingJobCount", "runningJobCount", "jobCount"});
 		tblUser.setColumnHeaders(new String[] {"User Names","Pending Jobs","Running Jobs", "Total jobs"});
 		
@@ -299,7 +304,15 @@ public class UserTable extends CustomComponent {
 			}
 		}));
 		
-		jobCountUpdater.start();
+//		jobCountUpdater.start();
+		
+		tblUser.setCellStyleGenerator(new Table.CellStyleGenerator() {
+			
+			public String getStyle(Object itemId, Object propertyId) {
+				// TODO Auto-generated method stub
+				return "black";
+			}
+		});
 		
 		log.info("Exiting populate()");
 		System.out.println("usertab: exit populate"+System.currentTimeMillis());
