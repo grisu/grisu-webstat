@@ -1,6 +1,7 @@
 package grisu.web;
 
 import grisu.backend.hibernate.JobStatDAO;
+import grisu.backend.hibernate.UserDAO;
 import grisu.backend.model.job.JobStat;
 import grisu.control.JobConstants;
 import grisu.jcommons.constants.Constants;
@@ -112,7 +113,7 @@ public class JobTable extends CustomComponent {
 		return tblJobs.getValue();
 	}
 
-	public void populate(String dn, String active, String running) {
+	public void populate(final String dn, String active, String running) {
 		// TODO Auto-generated method stub
 		log.debug("Inside populate");
 		System.out.println("jobtab: Inside populate"+System.currentTimeMillis());
@@ -183,6 +184,8 @@ public class JobTable extends CustomComponent {
 				{
 					lblClient.setVisible(false);
 				}
+				JobStatDAO jsDao = new JobStatDAO();
+				lblTotJobs.setValue("Total Jobs: "+jsDao.findJobCount(dn) +"(Active: "+jsDao.findActiveJobCount(dn)+", Running: "+jsDao.findRunningJobCount(dn)+")");
 				System.out.println("jobtableupdater ends");
 			}
 		};
@@ -212,17 +215,23 @@ public class JobTable extends CustomComponent {
 //			clientSet.add(app.get("client"));
 //		}
 
-		tblJobs.setVisibleColumns(new Object [] {"jobname","active", "submissionType", "fqan", "submittedJobDescription"});
-		tblJobs.setColumnHeaders(new String [] {"Job Name","Active", "Status", "Group", "Application key"});
+//		tblJobs.setVisibleColumns(new Object [] {"jobname","active", "submissionType", "fqan", "submittedJobDescription"});
+//		tblJobs.setColumnHeaders(new String [] {"Job Name","Active", "Status", "Group", "Application key"});
+		
+		tblJobs.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription"});
+		tblJobs.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key"});
 		tblJobs.select(tblJobs.firstItemId());
 		
-		tblJobsInactive.setVisibleColumns(new Object [] {"jobname","active", "submissionType", "fqan", "submittedJobDescription"});
-		tblJobsInactive.setColumnHeaders(new String [] {"Job Name","Active", "Status", "Group", "Application key"});
+//		tblJobsInactive.setVisibleColumns(new Object [] {"jobname","active", "submissionType", "fqan", "submittedJobDescription"});
+//		tblJobsInactive.setColumnHeaders(new String [] {"Job Name","Active", "Status", "Group", "Application key"});
+		
+		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription"});
+		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key"});
 		tblJobsInactive.select(tblJobsInactive.firstItemId());
 		
 		fireComponentEvent();
 		
-		lblTotJobs.setValue("Total Jobs: "+totSize +"(Active: "+active+", Running: "+running+")");
+//		lblTotJobs.setValue("Total Jobs: "+totSize +"(Active: "+active+", Running: "+running+")");
 		lblDn.setValue("DN: "+dn);
 		
 //		for(String cli:clientSet){
@@ -377,19 +386,21 @@ public class JobTable extends CustomComponent {
 		verticalLayout_3.setMargin(false);
 		
 		// tblJobs
-		tblJobs = new Table(){
-			//overriding the method so as to enable sorting only on specific columns ("active" column not sortable)
-		    public Collection<?> getSortableContainerPropertyIds() {
-		    		
-		    	LinkedList<Object> sortableColumns=new LinkedList<Object>();
-		    	sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
-		    	sortableColumns.add("submissionType");
-		    	sortableColumns.add("fqan");
-		    	sortableColumns.add("submittedJobDescription");
-		    	
-		    	return sortableColumns;
-		    }
-		};
+		tblJobs = new Table()
+//		{
+//			//overriding the method so as to enable sorting only on specific columns ("active" column not sortable)
+//		    public Collection<?> getSortableContainerPropertyIds() {
+//		    		
+//		    	LinkedList<Object> sortableColumns=new LinkedList<Object>();
+//		    	sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
+//		    	sortableColumns.add("submissionType");
+//		    	sortableColumns.add("fqan");
+//		    	sortableColumns.add("submittedJobDescription");
+//		    	
+//		    	return sortableColumns;
+//		    }
+//		}
+		;
 		tblJobs.setImmediate(true);
 		tblJobs.setWidth("100.0%");
 		//tblJobs.setHeight("80.0%");
@@ -410,19 +421,21 @@ public class JobTable extends CustomComponent {
 		
 		
 		// table_1
-		tblJobsInactive = new Table(){
-			//overriding the method so as to enable sorting only on specific columns ("active" column not sortable)
-		    public Collection<?> getSortableContainerPropertyIds() {
-		    		
-		    	LinkedList<Object> sortableColumns=new LinkedList<Object>();
-		    	sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
-		    	sortableColumns.add("submissionType");
-		    	sortableColumns.add("fqan");
-		    	sortableColumns.add("submittedJobDescription");
-		    	
-		    	return sortableColumns;
-		    }
-		};;
+		tblJobsInactive = new Table()
+//		{
+//			//overriding the method so as to enable sorting only on specific columns ("active" column not sortable)
+//		    public Collection<?> getSortableContainerPropertyIds() {
+//		    		
+//		    	LinkedList<Object> sortableColumns=new LinkedList<Object>();
+//		    	sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
+//		    	sortableColumns.add("submissionType");
+//		    	sortableColumns.add("fqan");
+//		    	sortableColumns.add("submittedJobDescription");
+//		    	
+//		    	return sortableColumns;
+//		    }
+//		}
+		;
 		tblJobsInactive.setImmediate(true);
 		tblJobsInactive.setWidth("100.0%");
 		tblJobsInactive.setHeight("80.0%");

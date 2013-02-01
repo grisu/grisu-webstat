@@ -230,7 +230,7 @@ public class UserTable extends CustomComponent {
 						tblItem.getItemProperty("jobCount").setValue("0");
 						tblItem.getItemProperty("pendingJobCount").setValue("0");
 						tblItem.getItemProperty("runningJobCount").setValue("0");
-						//itemIds.add(id);
+//						itemIds.add(id);
 					}
 				}
 				
@@ -257,6 +257,10 @@ public class UserTable extends CustomComponent {
 		
 		tblUser.select(tblUser.firstItemId());
 
+		//tblUser.sort("userName", true);
+		tblUser.setSortContainerPropertyId("userName");
+		tblUser.setSortAscending(true);
+		
 		fireComponentEvent();
 		
 		if(userList.size()<30)
@@ -344,7 +348,6 @@ public class UserTable extends CustomComponent {
 				tblItem.getItemProperty("jobCount").setValue(""+jsDao.findJobCount(dn));
 				tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
 				tblItem.getItemProperty("runningJobCount").setValue(""+running);
-				
 //			}
 		}
 		System.out.println("exiting refresh");
