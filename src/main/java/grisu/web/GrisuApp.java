@@ -65,28 +65,6 @@ public class GrisuApp extends Application {
 			//final 
 			final Panel jobDetailsPanel = new Panel("Job Details");
 			mainWindow.addComponent(jobDetailsPanel);
-			
-//			final Label id = new Label("Job ID: ");
-//			final Label jobHibernateId = new Label("jobHibernateId: ");
-//			final Label jobname = new Label("Job ID: ");
-//			final Label dn = new Label("Job ID: ");
-//			final Label jsdl = new Label("Job ID: ");
-//			final Label fqan = new Label("Job ID: ");
-//			final Label active = new Label("Job ID: ");
-//			final Label submittedJobDescription = new Label("Job ID: ");
-//			final Label status = new Label("Job ID: ");
-//			final Label submissionType = new Label("Job ID: ");
-//			
-//			jobDetailsPanel.addComponent(jobname);
-//			jobDetailsPanel.addComponent(dn);
-//			jobDetailsPanel.addComponent(jsdl);
-//			jobDetailsPanel.addComponent(fqan);
-//			jobDetailsPanel.addComponent(status);
-//			jobDetailsPanel.addComponent(submittedJobDescription);
-//			jobDetailsPanel.addComponent(submissionType);
-			
-			// Send changes in selection immediately to server.
-
 
 			// Shows feedback from selection.
 			final Label current = new Label("Selected: -");
@@ -95,23 +73,18 @@ public class GrisuApp extends Application {
 			final JobDetComponent jobDetComp = new JobDetComponent();
 			jobDetailsPanel.addComponent(jobDetComp);
 			
-			final UserTable tmp = new UserTable("");
-			jobDetailsPanel.addComponent(tmp);
+			final UserTable userTab = new UserTable();
+			jobDetailsPanel.addComponent(userTab);
 			
-			tmp.setTable(jobStatContainer);
-//			tmp.addListener(new ValueChangeListener() {
-//	            public void valueChange(ValueChangeEvent event) {
-//
-//	            }
-//	        });
-			
-			tmp.addListener(new ValueChangeListener() {
+			userTab.setTable(jobStatContainer);
+
+			userTab.addListener(new ValueChangeListener() {
 				
 				public void valueChange(ValueChangeEvent event) {
 					// TODO Auto-generated method stub
 				//	tmp.setVal();
-					current.setValue((JobStat)tmp.getTabcleClickVal());
-					jobDetComp.setJobDetails((JobStat)tmp.getTabcleClickVal());
+					current.setValue((JobStat)userTab.getTabcleClickVal());
+					jobDetComp.setJobDetails((JobStat)userTab.getTabcleClickVal());
 				}
 			});
 			
@@ -122,8 +95,6 @@ public class GrisuApp extends Application {
 			        jobDetComp.setJobDetails(currJob);
 			    }
 			});
-			
-			
 			
 		setMainWindow(mainWindow);
 	}
