@@ -74,17 +74,13 @@ public class JobTable extends CustomComponent {
 		setCompositionRoot(mainLayout);
 
 		// TODO add user code here
-
 		tblJobs.setSelectable(true);
 		tblJobs.setColumnReorderingAllowed(true);
 		
 		tblJobsInactive.setSelectable(true);
 		tblJobsInactive.setColumnReorderingAllowed(true);
 
-//		mainLayout.setCaption(caption);
-		//mainLayout.getContent().setSizeFull();
 		log.debug("Exiting constructor");
-		System.out.println("jobtab: exit constructor"+System.currentTimeMillis());
 	}
 
 	
@@ -106,8 +102,6 @@ public class JobTable extends CustomComponent {
 		tblJobs.setContainerDataSource(jobStatContainer);
 	}
 
-
-
 	public Object getTabcleClickVal() {
 		// TODO Auto-generated method stub
 		return tblJobs.getValue();
@@ -116,40 +110,33 @@ public class JobTable extends CustomComponent {
 	public void populate(final String dn, String active, String running) {
 		// TODO Auto-generated method stub
 		log.debug("Inside populate");
-		System.out.println("jobtab: Inside populate"+System.currentTimeMillis());
 		
 		JobStatDAO jsDao = new JobStatDAO();
 		List<JobStat> jobs=jsDao.findJobByDN(dn, true);
-		System.out.println("jobtab: Inside populate. jobs rcvd"+System.currentTimeMillis());
 		
 		BeanItemContainer<JobStat> jobContainer = new BeanItemContainer<JobStat>(JobStat.class);
 		BeanItemContainer<JobStat> inactiveJobContainer = new BeanItemContainer<JobStat>(JobStat.class);
 		
-//		System.out.println(jobs.size()+"..."+dn);
 		log.debug("No. of jobs: "+jobs.size() +"\ndn: "+dn);
 		
 		for(JobStat job:jobs){
 			if(job.isActive())
-				jobContainer.addBean(job);//(job);//(jobs);
+				jobContainer.addBean(job);
 			else
 				inactiveJobContainer.addBean(job);
 		}
 		
 		int totSize=jobs.size();
 		tblJobs.setContainerDataSource(jobContainer);
-	//	tblJobs.setPageLength(jobContainer.size());
 		tblJobsInactive.setContainerDataSource(inactiveJobContainer);
-	//	tblJobsInactive.setPageLength(inactiveJobContainer.size());
 		
 		final Set<String> clientSet = new HashSet<String>(); 
-		
 
 		Thread jobTableUpdater = new Thread(){
 			public void run(){
 				System.out.println("jobtableupdater starts");
 				Item tblItem=null;
 				String client="";
-//				Set<String> clientSet = new HashSet<String>(); 
 				
 				for(Object id:tblJobs.getItemIds())
 				{
@@ -189,41 +176,10 @@ public class JobTable extends CustomComponent {
 				System.out.println("jobtableupdater ends");
 			}
 		};
-//		Item tblItem=null;
-//		String client="";
-//		Set<String> clientSet = new HashSet<String>(); 
-//		
-//		for(Object id:tblJobs.getItemIds())
-//		{
-//			tblItem=tblJobs.getItem(id);
-//			int status  = (Integer) tblItem.getItemProperty("status").getValue();
-//			tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
-//			Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
-//			tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
-//			
-//			clientSet.add(app.get("client"));
-//		}
-//		
-//		for(Object id:tblJobsInactive.getItemIds())
-//		{
-//			tblItem=tblJobsInactive.getItem(id);
-//			int status  = (Integer) tblItem.getItemProperty("status").getValue();
-//			tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
-//			Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
-//			tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
-//
-//			clientSet.add(app.get("client"));
-//		}
-
-//		tblJobs.setVisibleColumns(new Object [] {"jobname","active", "submissionType", "fqan", "submittedJobDescription"});
-//		tblJobs.setColumnHeaders(new String [] {"Job Name","Active", "Status", "Group", "Application key"});
 		
 		tblJobs.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription"});
 		tblJobs.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key"});
 		tblJobs.select(tblJobs.firstItemId());
-		
-//		tblJobsInactive.setVisibleColumns(new Object [] {"jobname","active", "submissionType", "fqan", "submittedJobDescription"});
-//		tblJobsInactive.setColumnHeaders(new String [] {"Job Name","Active", "Status", "Group", "Application key"});
 		
 		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription"});
 		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key"});
@@ -231,23 +187,7 @@ public class JobTable extends CustomComponent {
 		
 		fireComponentEvent();
 		
-//		lblTotJobs.setValue("Total Jobs: "+totSize +"(Active: "+active+", Running: "+running+")");
 		lblDn.setValue("DN: "+dn);
-		
-//		for(String cli:clientSet){
-//			if(cli!=null)
-//				client+=cli+", ";
-//		}
-//		if(client.length()>0){
-//			lblClient.setVisible(true);
-//			lblClient.setValue("Client(s): "+client.substring(0, client.length()-2));
-//		}
-//		else
-//		{
-//			lblClient.setVisible(false);
-//		}
-		
-		//Custom sorter (as the default sorting doesn't work properly for the columns with generated values)
 		jobContainer.setItemSorter(new DefaultItemSorter(new Comparator<Object>() {
 			
 			public int compare(Object obj1, Object obj2) {
@@ -256,9 +196,6 @@ public class JobTable extends CustomComponent {
 				{
 					return ((String)obj1).toLowerCase().compareTo(((String) obj2).toLowerCase());
 				}
-//				else if(obj1 instanceof Boolean){
-//					return ((Boolean)obj1).compareTo((Boolean)obj2);
-//				}
 				else	
 				{
 					return ((Integer)obj1-(Integer)obj2);
@@ -385,25 +322,9 @@ public class JobTable extends CustomComponent {
 		verticalLayout_3.setHeight("-1px");
 		verticalLayout_3.setMargin(false);
 		
-		// tblJobs
-		tblJobs = new Table()
-//		{
-//			//overriding the method so as to enable sorting only on specific columns ("active" column not sortable)
-//		    public Collection<?> getSortableContainerPropertyIds() {
-//		    		
-//		    	LinkedList<Object> sortableColumns=new LinkedList<Object>();
-//		    	sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
-//		    	sortableColumns.add("submissionType");
-//		    	sortableColumns.add("fqan");
-//		    	sortableColumns.add("submittedJobDescription");
-//		    	
-//		    	return sortableColumns;
-//		    }
-//		}
-		;
+		tblJobs = new Table();
 		tblJobs.setImmediate(true);
 		tblJobs.setWidth("100.0%");
-		//tblJobs.setHeight("80.0%");
 		
 		verticalLayout_3.addComponent(tblJobs);
 		
@@ -419,23 +340,8 @@ public class JobTable extends CustomComponent {
 		verticalLayout_4.setHeight("-1px");
 		verticalLayout_4.setMargin(false);
 		
-		
 		// table_1
-		tblJobsInactive = new Table()
-//		{
-//			//overriding the method so as to enable sorting only on specific columns ("active" column not sortable)
-//		    public Collection<?> getSortableContainerPropertyIds() {
-//		    		
-//		    	LinkedList<Object> sortableColumns=new LinkedList<Object>();
-//		    	sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
-//		    	sortableColumns.add("submissionType");
-//		    	sortableColumns.add("fqan");
-//		    	sortableColumns.add("submittedJobDescription");
-//		    	
-//		    	return sortableColumns;
-//		    }
-//		}
-		;
+		tblJobsInactive = new Table();
 		tblJobsInactive.setImmediate(true);
 		tblJobsInactive.setWidth("100.0%");
 		tblJobsInactive.setHeight("80.0%");
@@ -443,5 +349,4 @@ public class JobTable extends CustomComponent {
 		
 		return verticalLayout_4;
 	}
-
 }

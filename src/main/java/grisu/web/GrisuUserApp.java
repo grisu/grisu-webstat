@@ -34,20 +34,48 @@ public class GrisuUserApp extends Application {
 	public void init() {
 
 		log.debug("Entered init()");
-		System.out.println("Entered init()");
 		
 		Window mainWindow = new Window("Grisu");
 
 		final Table t2 = new Table("Job Table");
 
-		final UserTable userTab = new UserTable("Users");
+		final UserTable userTab = new UserTable();
 
 		VerticalLayout layout= new VerticalLayout();
+
+//start
+		final Panel userTabPan = new Panel();
+		userTabPan.setCaption("Users");
+		
+		Button btnUserRefresh = new Button();
+		btnUserRefresh.setCaption("Refresh");
+		btnUserRefresh.addListener(new Button.ClickListener() {
+			
+			public void buttonClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+					Thread refresherThread = new Thread(){
+					public void run(){
+						log.debug("refresh starts ");
+						System.out.println("refresh start");
+						userTab.refresh();
+
+						log.debug("refresh ends ");
+						System.out.println("refresh end");
+					}
+				};
+				refresherThread.start();
+			}				
+		});
+		
+		userTabPan.addComponent(btnUserRefresh);
+		userTabPan.addComponent(userTab);
+//end		
 		
 		HorizontalSplitPanel horiSplitPanel = new HorizontalSplitPanel();
 		layout.addComponent(horiSplitPanel);
 		mainWindow.setContent(layout);
-		horiSplitPanel.addComponent(userTab);
+//		horiSplitPanel.addComponent(userTab);
+		horiSplitPanel.addComponent(userTabPan);
 		userTab.setHeight("100%");
 		horiSplitPanel.setSizeFull();
 		horiSplitPanel.setHeight("100%");
@@ -76,12 +104,10 @@ public class GrisuUserApp extends Application {
 		});
 		
 		jobTabPan.addComponent(btnJobRefresh);
-		//btnJobRefresh.
 		jobTabPan.setSizeFull();
 		jobTabPan.addComponent(jobTab);
 		jobTabPan.setCaption("Jobs for selected user");
 		vertiSplitPanel.addComponent(jobTabPan);
-
 		
 		horiSplitPanel.addComponent(vertiSplitPanel);
 		horiSplitPanel.setHeight("100%");
@@ -122,67 +148,41 @@ public class GrisuUserApp extends Application {
 		});
 		
 		vertiSplitPanel.getSecondComponent().setSizeFull();
-		
 		mainWindow.getContent().setSizeFull();
-
 		setMainWindow(mainWindow);
 
 		userTab.populate();
 		
 		final Refresher refresher = new Refresher();
-		refresher.setEnabled(false);
+		//refresher.setEnabled(false);
 		refresher.setRefreshInterval(ServerPropertiesManager.getDatabaseRefresh());
-	//	refresher.setRefreshInterval(30000);
-		
 		
 		refresher.setHeight("1%");
 		
 		refresher.addListener(new RefreshListener() {
 			
 			public void refresh(Refresher source) {
-				
-//				refresher.setEnabled(false);
-		//		System.out.println("refresh starts "+System.currentTimeMillis());
 				// TODO Auto-generated method stub
-				
 				Thread refresherThread = new Thread(){
 					
 					public void run(){
 						refresher.setEnabled(false);
-						System.out.println("refresh starts "+System.currentTimeMillis());
-						System.out.println(refresher.isEnabled());
+						log.debug("refresh starts ");
 						userTab.refresh();
-						
-//						Users selectedUser = (Users) userTab.getSelectedUser();
-//						if(selectedUser!=null){
-//							jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
-//						}						
-						System.out.println("refresh ends "+System.currentTimeMillis());
+
+						log.debug("refresh ends ");
 						refresher.setEnabled(true);
 					}
 				};
 				refresherThread.start();
-				
-				//userTab.refresh();
-				//reload the job pane and job-details pane
-/*new
-				Users selectedUser = (Users) userTab.getSelectedUser();
-				if(selectedUser!=null){
-					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
-				}
-				refresher.setEnabled(true);
-**/				
-			//	System.out.println("refresh ends "+System.currentTimeMillis());
 			}
 		});
 		
 		
 		mainWindow.addComponent(refresher);
-	//	refresher.setEnabled(false);
-		refresher.setEnabled(true);
+		refresher.setEnabled(false);
 		
 		log.debug("Exiting init()");
-		System.out.println("Exiting init()");
 	}
 
 }
