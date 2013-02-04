@@ -110,6 +110,7 @@ public class JobTable extends CustomComponent {
 	public void populate(final String dn, String active, String running) {
 		// TODO Auto-generated method stub
 		log.debug("Inside populate");
+		System.out.println("\n\n\nInside populate");
 		
 		JobStatDAO jsDao = new JobStatDAO();
 		List<JobStat> jobs=jsDao.findJobByDN(dn, true);
@@ -134,30 +135,63 @@ public class JobTable extends CustomComponent {
 
 		Thread jobTableUpdater = new Thread(){
 			public void run(){
+				
+				try{
+					
 				System.out.println("jobtableupdater starts");
 				Item tblItem=null;
 				String client="";
 				
+				synchronized (tblJobs) {
+					
+				
 				for(Object id:tblJobs.getItemIds())
 				{
+					try{
 					tblItem=tblJobs.getItem(id);
 					int status  = (Integer) tblItem.getItemProperty("status").getValue();
-					tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
+			//		synchronized (tblItem) {
+						tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
+			//		}
 					Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
-					tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
 					
+			//		synchronized (tblItem) {
+					tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
+			//		}
 					clientSet.add(app.get("client"));
+					}
+					catch(Exception e)
+					{
+						System.out.println("for loop1");
+						e.printStackTrace();
+					}
 				}
+				}
+				
+				synchronized (tblJobsInactive) {
 				
 				for(Object id:tblJobsInactive.getItemIds())
 				{
+					try{
 					tblItem=tblJobsInactive.getItem(id);
 					int status  = (Integer) tblItem.getItemProperty("status").getValue();
-					tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));
+				//	synchronized (tblItem) {
+						tblItem.getItemProperty("submissionType").setValue(""+JobConstants.translateStatus(status));	
+				//	}
+					
 					Map<String, String> app= (Map)tblItem.getItemProperty("properties").getValue();
-					tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key
+					
+				//	synchronized (tblItem) {
+						tblItem.getItemProperty("submittedJobDescription").setValue(app.get(Constants.APPLICATIONNAME_KEY));//appplication key	
+				//	}
+					
 
 					clientSet.add(app.get("client"));
+					}catch(Exception e){
+						System.out.println("for loop2");
+						e.printStackTrace();
+					}
+				}
 				}
 				for(String cli:clientSet){
 					if(cli!=null)
@@ -174,6 +208,11 @@ public class JobTable extends CustomComponent {
 				JobStatDAO jsDao = new JobStatDAO();
 				lblTotJobs.setValue("Total Jobs: "+jsDao.findJobCount(dn) +"(Active: "+jsDao.findActiveJobCount(dn)+", Running: "+jsDao.findRunningJobCount(dn)+")");
 				System.out.println("jobtableupdater ends");
+				}
+				catch(Exception e){
+					System.out.println("exception in jobtableupdater");
+					e.printStackTrace();
+				}
 			}
 		};
 		
@@ -216,7 +255,7 @@ public class JobTable extends CustomComponent {
 		jobTableUpdater.start();
 		
 		log.debug("Exiting populate");
-		System.out.println("Exiting populate");
+		System.out.println("jobtab: Exiting populate");
 		System.out.println("jobtab: exit populate"+System.currentTimeMillis());
 	}
 
