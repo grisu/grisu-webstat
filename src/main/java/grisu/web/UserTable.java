@@ -230,6 +230,7 @@ public class UserTable extends CustomComponent {
 		{
 			tblItem=tblUser.getItem(id);
 			dn=(String) tblItem.getItemProperty("dn").getValue();
+			try{
 				synchronized (tblItem) {
 					tblItem.getItemProperty("jobCount").setValue(""+jsDao.findJobCount(dn));
 				}
@@ -241,6 +242,10 @@ public class UserTable extends CustomComponent {
 				synchronized (tblItem) {
 					tblItem.getItemProperty("runningJobCount").setValue(""+jsDao.findRunningJobCount(dn));
 				}
+			}
+			catch(Exception e){
+				
+			}
 		}
 	}	
 	
