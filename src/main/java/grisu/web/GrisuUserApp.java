@@ -87,6 +87,7 @@ public class GrisuUserApp extends Application {
 		final JobTable jobTab = new JobTable();
 		//vertiSplitPanel.addComponent(jobTab);
 		final Panel jobTabPan = new Panel();
+		jobTabPan.setScrollable(true);
 		
 		Button btnJobRefresh = new Button();
 		btnJobRefresh.setCaption("Refresh");
@@ -107,13 +108,14 @@ public class GrisuUserApp extends Application {
 		jobTabPan.setSizeFull();
 		jobTabPan.addComponent(jobTab);
 		jobTabPan.setCaption("Jobs for selected user");
+		//jobTabPan.getContent().setSizeFull();
 		vertiSplitPanel.addComponent(jobTabPan);
 		
 		horiSplitPanel.addComponent(vertiSplitPanel);
 		horiSplitPanel.setHeight("100%");
 		horiSplitPanel.getFirstComponent().setSizeFull();
 		
-		horiSplitPanel.setSplitPosition(50);
+		horiSplitPanel.setSplitPosition(40);
 
 		userTab.addListener(new ValueChangeListener() {
 			public void valueChange(ValueChangeEvent event) {
