@@ -167,6 +167,17 @@ public class JobTable extends CustomComponent {
 			}
 		});
 		
+		tblJobs.addGeneratedColumn("queue", new ColumnGenerator() {
+			
+			public Object generateCell(Table source, Object itemId, Object columnId) {
+				// TODO Auto-generated method stub
+				JobStat job = (JobStat)itemId;
+				Map<String, String> propertyMap = job.getProperties();
+				//System.out.println("executable:"+propertyMap.get("executable"));
+				return propertyMap.get("queue");
+			}
+		});
+		
 		tblJobsInactive.addGeneratedColumn("walltime", new ColumnGenerator() {
 			
 			public Object generateCell(Table source, Object itemId, Object columnId) {
@@ -230,23 +241,26 @@ public class JobTable extends CustomComponent {
 				return propertyMap.get("executable");
 			}
 		});		
-		
+
+		tblJobsInactive.addGeneratedColumn("queue", new ColumnGenerator() {
+			
+			public Object generateCell(Table source, Object itemId, Object columnId) {
+				// TODO Auto-generated method stub
+				JobStat job = (JobStat)itemId;
+				Map<String, String> propertyMap = job.getProperties();
+				//System.out.println("executable:"+propertyMap.get("executable"));
+				return propertyMap.get("queue");
+			}
+		});
 		
 		tblJobs.setContainerDataSource(jobContainer);
 		tblJobsInactive.setContainerDataSource(inactiveJobContainer);
 		
-		tblJobs.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription", "walltime", "cpus", "memory", "submitted", "executable"});
-		tblJobs.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key", "Walltime", "CPUs", "Memory", "Submitted At", "Executable"});		
+		tblJobs.setVisibleColumns(new Object [] {"jobname", "queue", "walltime", "cpus", "memory", "submitted", "executable", "fqan", "submissionType", "submittedJobDescription" });
+		tblJobs.setColumnHeaders(new String [] {"Job Name", "Queue", "Walltime", "CPUs", "Memory", "Submitted At", "Executable","Group", "Status",  "Application key" });		
 
-//		tblJobs.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "walltime", "cpus", "memory", "submitted", "executable"});
-//		tblJobs.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Walltime", "CPUs", "Memory", "Submitted At", "Executable"});		
-		
-		
-//		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription"});
-//		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key"});
-
-		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription", "walltime", "cpus", "memory", "submitted", "executable"});
-		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key", "Walltime", "CPUs", "Memory", "Submitted At", "Executable"});				
+		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "queue", "walltime", "cpus", "memory", "submitted", "executable", "fqan", "submissionType", "submittedJobDescription" });
+		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Queue", "Walltime", "CPUs", "Memory", "Submitted At", "Executable","Group", "Status",  "Application key" });		
 		
 		jobContainer.setItemSorter(new DefaultItemSorter(new Comparator<Object>() {
 			public int compare(Object obj1, Object obj2) {
@@ -320,19 +334,7 @@ public class JobTable extends CustomComponent {
 			else
 				inactiveJobContainer.addBean(job);
 		}
-		
-	//	int totSize=jobs.size();
-//		tblJobs.setContainerDataSource(jobContainer);
-//		tblJobsInactive.setContainerDataSource(inactiveJobContainer);
-		
-		//tblJobs.addContainerProperty("walltime", String.class, null);
-		
-		tblJobs.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription", "walltime", "cpus", "memory", "submitted", "executable"});
-		tblJobs.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key", "Walltime", "CPUs", "Memory", "Submitted At", "Executable"});		
-//		
-//		tblJobs.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "walltime", "cpus", "memory", "submitted", "executable"});
-//		tblJobs.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Walltime", "CPUs", "Memory", "Submitted At", "Executable"});
-		
+				
 		final Set<String> clientSet = new HashSet<String>();
 		final Set<String> appSet = new HashSet<String>();
 
@@ -447,47 +449,12 @@ public class JobTable extends CustomComponent {
 			}
 		};
 		
-		
-//		tblJobs.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription", "walltime"});
-//		tblJobs.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key", "Walltime"});
-
-//		tblJobs.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription"});
-//		tblJobs.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key"});
-		
 		tblJobs.select(tblJobs.firstItemId());
-		
-//		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "submissionType", "fqan", "submittedJobDescription"});
-//		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Status", "Group", "Application key"});
 		tblJobsInactive.select(tblJobsInactive.firstItemId());
 		
 		fireComponentEvent();
 		
 		lblDn.setValue("DN: "+dn);
-//		jobContainer.setItemSorter(new DefaultItemSorter(new Comparator<Object>() {
-//			
-//			public int compare(Object obj1, Object obj2) {
-//				// TODO Auto-generated method stub
-//				if(obj1 instanceof String)
-//				{
-//					return ((String)obj1).toLowerCase().compareTo(((String) obj2).toLowerCase());
-//				}
-//				else	
-//				{
-//					return ((Integer)obj1-(Integer)obj2);
-//				}
-//			}
-//		}));
-//		
-//		inactiveJobContainer.setItemSorter(new DefaultItemSorter(new Comparator<Object>() {
-//			public int compare(Object obj1, Object obj2) {
-//				if(obj1 instanceof String)
-//					return ((String)obj1).toLowerCase().compareTo(((String) obj2).toLowerCase());
-//				else	
-//					return ((Integer)obj1-(Integer)obj2);
-//			}
-//		}));
-		
-		
 		jobTableUpdater.start();
 
 		log.debug("Exiting populate");
