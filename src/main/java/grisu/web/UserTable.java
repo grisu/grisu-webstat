@@ -102,6 +102,7 @@ public class UserTable extends CustomComponent {
 		
 		Thread jobCountUpdater = new Thread(){
 			public void run() {
+				tblUser.setImmediate(true);
 				System.out.println("jobCountUpdater starts");
 				JobStatDAO jsDao = new JobStatDAO();
 				Item tblItem=null;
@@ -129,11 +130,11 @@ public class UserTable extends CustomComponent {
 				refresh();
 				tblUser.setContainerDataSource(tblUser.getContainerDataSource());
 				tblUser.refreshRowCache();
+				tblUser.getApplication().getMainWindow().executeJavaScript("javascript:vaadin.forceSync();");
 		//		tblUser.requestRepaint();
 //				tblUser.refreshCurrentPage();
 				tblUser.setVisibleColumns(new Object [] {"userName", "pendingJobCount", "runningJobCount", "jobCount"});
 				tblUser.setColumnHeaders(new String[] {"User Names","Pending Jobs","Running Jobs", "Total jobs"});
-
 			}
 		};
 		
