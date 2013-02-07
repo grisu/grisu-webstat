@@ -104,32 +104,32 @@ public class UserTable extends CustomComponent {
 			public void run() {
 				tblUser.setImmediate(true);
 				System.out.println("jobCountUpdater starts");
-//				JobStatDAO jsDao = new JobStatDAO();
-//				Item tblItem=null;
-//				String dn=null;
-//				int running;
-//				int totJobCount;
-//				for(Object id:tblUser.getItemIds())
-//				{
-//					tblItem=tblUser.getItem(id);
-//					dn=(String) tblItem.getItemProperty("dn").getValue();
-//					totJobCount=jsDao.findJobCount(dn);
-//					if(totJobCount>0){
-//						running = jsDao.findRunningJobCount(dn);
-//						tblItem.getItemProperty("jobCount").setValue(""+totJobCount);
-//						tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
-//						tblItem.getItemProperty("runningJobCount").setValue(""+running);							
-//					}
-//					else{
-//
-//						tblItem.getItemProperty("jobCount").setValue("0");
-//						tblItem.getItemProperty("pendingJobCount").setValue("0");
-//						tblItem.getItemProperty("runningJobCount").setValue("0");
-//					}
-//				}
+				JobStatDAO jsDao = new JobStatDAO();
+				Item tblItem=null;
+				String dn=null;
+				int running;
+				int totJobCount;
+				for(Object id:tblUser.getItemIds())
+				{
+					tblItem=tblUser.getItem(id);
+					dn=(String) tblItem.getItemProperty("dn").getValue();
+					totJobCount=jsDao.findJobCount(dn);
+					if(totJobCount>0){
+						running = jsDao.findRunningJobCount(dn);
+						tblItem.getItemProperty("jobCount").setValue(""+totJobCount);
+						tblItem.getItemProperty("pendingJobCount").setValue(jsDao.findPendingJobCount(dn));
+						tblItem.getItemProperty("runningJobCount").setValue(""+running);							
+					}
+					else{
+
+						tblItem.getItemProperty("jobCount").setValue("0");
+						tblItem.getItemProperty("pendingJobCount").setValue("0");
+						tblItem.getItemProperty("runningJobCount").setValue("0");
+					}
+				}
 				refresh();
 //				tblUser.setContainerDataSource(tblUser.getContainerDataSource());
-				tblUser.refreshRowCache();
+//				tblUser.refreshRowCache();
 				tblUser.getApplication().getMainWindow().executeJavaScript("window.location.href=window.location.href;");
 		//		tblUser.requestRepaint();
 //				tblUser.refreshCurrentPage();
