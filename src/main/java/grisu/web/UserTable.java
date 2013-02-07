@@ -100,6 +100,7 @@ public class UserTable extends CustomComponent {
 			userList.add(temp);
 		}
 		
+		/**
 		Thread jobCountUpdater = new Thread(){
 			public void run() {
 				tblUser.setImmediate(true);
@@ -131,7 +132,7 @@ public class UserTable extends CustomComponent {
 				refresh();
 				tblUser.setContainerDataSource(tblUser.getContainerDataSource());
 				tblUser.refreshRowCache();
-				tblUser.getApplication().getMainWindow().executeJavaScript("window.location.href=window.location.href;");
+				//tblUser.getApplication().getMainWindow().executeJavaScript("window.location.href=window.location.href;");
 				
 				tblUser.requestRepaint();
 //				tblUser.refreshCurrentPage();
@@ -140,13 +141,14 @@ public class UserTable extends CustomComponent {
 				System.out.println("jobcountupdater ends");
 			}
 		};
+		**/
 		
 		userContainer = new BeanItemContainer<Users>(Users.class);
 
 		userContainer.addAll(userList);
 		tblUser.setContainerDataSource(userContainer);
 		
-		jobCountUpdater.start();
+		//jobCountUpdater.start();
 		
 		tblUser.setVisibleColumns(new Object [] {"userName", "pendingJobCount", "runningJobCount", "jobCount"});
 		tblUser.setColumnHeaders(new String[] {"User Names","Pending Jobs","Running Jobs", "Total jobs"});
@@ -250,6 +252,7 @@ public class UserTable extends CustomComponent {
 				
 			}
 		}
+		System.out.println("exiting refresh");
 	}	
 	
 	

@@ -1,5 +1,8 @@
 package grisu.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import listeners.CustomValueChangeListener;
 import grisu.backend.model.job.JobStat;
 import grisu.settings.ServerPropertiesManager;
@@ -154,6 +157,9 @@ public class GrisuUserApp extends Application {
 		setMainWindow(mainWindow);
 
 		userTab.populate();
+		Map vars = new HashMap();
+		vars.put("state",true);
+		btnUserRefresh.changeVariables(this, vars);
 		
 		final Refresher refresher = new Refresher();
 		//refresher.setEnabled(false);
