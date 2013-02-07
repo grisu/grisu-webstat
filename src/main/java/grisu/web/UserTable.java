@@ -126,8 +126,8 @@ public class UserTable extends CustomComponent {
 						tblItem.getItemProperty("runningJobCount").setValue("0");
 					}
 				}
-			//	tblUser.refreshRowCache();
-//				tblUser.requestRepaint();
+				tblUser.refreshRowCache();
+				tblUser.requestRepaint();
 //				tblUser.refreshCurrentPage();
 			}
 		};
