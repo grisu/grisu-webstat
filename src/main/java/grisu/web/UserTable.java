@@ -126,9 +126,13 @@ public class UserTable extends CustomComponent {
 						tblItem.getItemProperty("runningJobCount").setValue("0");
 					}
 				}
+				tblUser.setContainerDataSource(tblUser.getContainerDataSource());
 				tblUser.refreshRowCache();
-				tblUser.requestRepaint();
+		//		tblUser.requestRepaint();
 //				tblUser.refreshCurrentPage();
+				tblUser.setVisibleColumns(new Object [] {"userName", "pendingJobCount", "runningJobCount", "jobCount"});
+				tblUser.setColumnHeaders(new String[] {"User Names","Pending Jobs","Running Jobs", "Total jobs"});
+
 			}
 		};
 		

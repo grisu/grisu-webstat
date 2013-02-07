@@ -351,7 +351,7 @@ public class JobTable extends CustomComponent {
 					int jobCount =0;
 					int wallTimeCount=0;
 
-					synchronized (tblJobs) {
+//					synchronized (tblJobs) {
 
 						for(Object id:tblJobs.getItemIds())
 						{
@@ -380,9 +380,9 @@ public class JobTable extends CustomComponent {
 								e.printStackTrace();
 							}
 						}
-					}
-
-					synchronized (tblJobsInactive) {
+//					}
+//
+//					synchronized (tblJobsInactive) {
 
 						for(Object id:tblJobsInactive.getItemIds())
 						{
@@ -407,7 +407,7 @@ public class JobTable extends CustomComponent {
 								e.printStackTrace();
 							}
 						}
-					}
+//					}
 					for(String cli:clientSet){
 						if(cli!=null)
 							client+=cli+", ";
