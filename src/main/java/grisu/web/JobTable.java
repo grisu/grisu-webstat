@@ -70,7 +70,7 @@ public class JobTable extends CustomComponent {
 	private static Logger log = LoggerFactory.getLogger(Thread.currentThread().getClass());
 
 	private BeanItemContainer<JobStat> jobContainer = new BeanItemContainer<JobStat>(JobStat.class){
-			//overriding the method so as to enable sorting on generated columns 
+			//overriding the method so as to enable sorting on generated columns as well 
 			public Collection<?> getSortableContainerPropertyIds() {
 
 				LinkedList<Object> sortableColumns=new LinkedList<Object>();
@@ -90,11 +90,11 @@ public class JobTable extends CustomComponent {
 			}
 	};
 	private BeanItemContainer<JobStat> inactiveJobContainer = new BeanItemContainer<JobStat>(JobStat.class){
-		//overriding the method so as to enable sorting ongenerated columns ("active" column not sortable)
+		//overriding the method so as to enable sorting on generated columns as well
 		public Collection<?> getSortableContainerPropertyIds() {
 
 			LinkedList<Object> sortableColumns=new LinkedList<Object>();
-			sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
+			sortableColumns.add("jobname");
 			sortableColumns.add("submissionType");
 			sortableColumns.add("fqan");
 			sortableColumns.add("submittedJobDescription");
@@ -116,11 +116,19 @@ public class JobTable extends CustomComponent {
 	 * So, if this order changes in future, the storage/retrieval order(indices) should change as well  
 	 */
 	private ArrayListMultimap<Object, String> genColMap = ArrayListMultimap.create();
-	
+
+	/* Multimap to store the objects itemId in the container as key and
+	 * the generated column values as value-list
+	 * These will be used when sorting generated columns, since their data is not stored
+	 * in the container 
+	 */
 	private static Map<String, Integer> genColNameMap = new HashMap<String, Integer>();
 
 	private Map<String, String> jobPropertyMap;
+
 	
+//static map to map the generated columns with their indices 
+//	in the Multimap value list	
 	static{
 		genColNameMap.put("queue", 0);
 		genColNameMap.put("walltime", 1);
@@ -801,7 +809,7 @@ public class JobTable extends CustomComponent {
 
 		tblJobs = new Table()
 		{
-			//overriding the method so as to enable sorting only on specific columns 
+			//overriding the method so as to enable sorting on generated columns as well 
 			public Collection<?> getSortableContainerPropertyIds() {
 
 				LinkedList<Object> sortableColumns=new LinkedList<Object>();
@@ -840,7 +848,7 @@ public class JobTable extends CustomComponent {
 
 		// table_1
 		tblJobsInactive = new Table(){
-			//overriding the method so as to enable sorting only on specific columns ("active" column not sortable)
+			//overriding the method so as to enable sorting only on generated columns as well
 			public Collection<?> getSortableContainerPropertyIds() {
 
 				LinkedList<Object> sortableColumns=new LinkedList<Object>();
@@ -866,5 +874,4 @@ public class JobTable extends CustomComponent {
 
 		return verticalLayout_4;
 	}
-
 }
