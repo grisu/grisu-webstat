@@ -9,6 +9,7 @@ import grisu.jcommons.utils.WalltimeUtils;
 
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -109,8 +110,6 @@ public class JobTable extends CustomComponent {
 		}
 	};
 
-	private Map<Object, String> submittedTime = new HashMap<Object, String>();
-	
 	/*
 	 * The values(generated cells) for a key (object) being stored and retrieved in the order in which
 	 * they are being called in the setVisibleColumns method. 
@@ -148,12 +147,6 @@ public class JobTable extends CustomComponent {
 		// TODO add user code here
 		tblJobs.setSelectable(true);
 		tblJobs.setColumnReorderingAllowed(true);
-		//tblJobs.setPageLength(10);
-
-		//mainLayout.setCaption(caption);
-		//		tblJobs.setSizeFull();
-		//		tblJobs.setHeight("100%");
-		//		tblJobs.setWidth(null);
 
 		tblJobsInactive.setSelectable(true);
 		tblJobsInactive.setColumnReorderingAllowed(true);
@@ -220,12 +213,12 @@ public class JobTable extends CustomComponent {
 				String val = jobPropertyMap.get("submissionTime");
 				try{
 					Date d = new Date(Long.parseLong(val));
-					submittedTime.put(itemId, d.toString());
+					SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+					
 					if(genColMap.get(itemId).size()<6)
-						genColMap.put(itemId, d.toString());
-					return d.toString();
+						genColMap.put(itemId, val);
+					return sdf.format(d);
 				}catch(NumberFormatException nfe){
-					submittedTime.put(itemId, "");
 					if(genColMap.get(itemId).size()<6)
 						genColMap.put(itemId, "");
 					return "";
@@ -335,12 +328,12 @@ public class JobTable extends CustomComponent {
 				String val = jobPropertyMap.get("submissionTime");
 				try{
 					Date d = new Date(Long.parseLong(val));
-					submittedTime.put(itemId, d.toString());
+					SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
 					if(genColMap.get(itemId).size()<6)
-						genColMap.put(itemId, d.toString());
-					return d.toString();
+						genColMap.put(itemId, val);
+					return sdf.format(d);
 				}catch(NumberFormatException nfe){
-					submittedTime.put(itemId, "");
 					if(genColMap.get(itemId).size()<6)
 						genColMap.put(itemId, "");
 					return "";
@@ -520,7 +513,6 @@ public class JobTable extends CustomComponent {
 		log.debug("Inside populate");
 		System.out.println("\n\n\nInside populate");
 
-		submittedTime = new HashMap<Object, String>();
 		genColMap = ArrayListMultimap.create();
 		
 		JobStatDAO jsDao = new JobStatDAO();
@@ -813,7 +805,7 @@ public class JobTable extends CustomComponent {
 			public Collection<?> getSortableContainerPropertyIds() {
 
 				LinkedList<Object> sortableColumns=new LinkedList<Object>();
-				sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
+				sortableColumns.add("jobname");
 				sortableColumns.add("submissionType");
 				sortableColumns.add("fqan");
 				sortableColumns.add("submittedJobDescription");
@@ -852,7 +844,7 @@ public class JobTable extends CustomComponent {
 			public Collection<?> getSortableContainerPropertyIds() {
 
 				LinkedList<Object> sortableColumns=new LinkedList<Object>();
-				sortableColumns.add("jobname");//"jobname","active", "submissionType", "fqan", "submittedJobDescription"
+				sortableColumns.add("jobname");
 				sortableColumns.add("submissionType");
 				sortableColumns.add("fqan");
 				sortableColumns.add("submittedJobDescription");
