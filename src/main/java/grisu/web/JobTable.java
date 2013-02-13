@@ -105,6 +105,8 @@ public class JobTable extends CustomComponent {
 	
 	private static Map<String, Integer> genColNameMap = new HashMap<String, Integer>();
 
+	private Map<String, String> jobPropertyMap;
+	
 	static{
 		genColNameMap.put("queue", 0);
 		genColNameMap.put("walltime", 1);
@@ -149,12 +151,14 @@ public class JobTable extends CustomComponent {
 
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				// TODO Auto-generated method stub
-				JobStat job = (JobStat)itemId;
-				Map<String, String> propertyMap = job.getProperties();
+				//JobStat job = (JobStat)itemId;
+				//Map<String, String> propertyMap = job.getProperties();
+				//String wallTimeval = propertyMap.get("walltime");
+				String wallTimeval = jobPropertyMap.get("walltime");
 				if(genColMap.get(itemId).size()<6)
-					genColMap.put(itemId, propertyMap.get("walltime"));
+					genColMap.put(itemId, wallTimeval);
 				//System.out.println("walltime:"+propertyMap.get("walltime"));
-				return WalltimeUtils.convertSeconds(Integer.parseInt(propertyMap.get("walltime"))*60);
+				return WalltimeUtils.convertSeconds(Integer.parseInt(wallTimeval)*60);
 			}
 		});
 
@@ -162,13 +166,15 @@ public class JobTable extends CustomComponent {
 
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				// TODO Auto-generated method stub
-				JobStat job = (JobStat)itemId;
-				Map<String, String> propertyMap = job.getProperties();
+				//JobStat job = (JobStat)itemId;
+				//Map<String, String> propertyMap = job.getProperties();
+				//String cpuVal = propertyMap.get("cpus");
+				String cpuVal = jobPropertyMap.get("cpus");
 				if(genColMap.get(itemId).size()<6)
-					genColMap.put(itemId, propertyMap.get("cpus"));
+					genColMap.put(itemId, cpuVal);
 				//System.out.println("cpus:"+propertyMap.get("cpus"));
 
-				return propertyMap.get("cpus");
+				return cpuVal;
 			}
 		});
 
@@ -176,12 +182,14 @@ public class JobTable extends CustomComponent {
 
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				// TODO Auto-generated method stub
-				JobStat job = (JobStat)itemId;
-				Map<String, String> propertyMap = job.getProperties();
+				//JobStat job = (JobStat)itemId;
+				//Map<String, String> propertyMap = job.getProperties();
 				//System.out.println("memory:"+propertyMap.get("memory"));
+				//String memoryVal = propertyMap.get("memory");
+				String memoryVal = jobPropertyMap.get("memory");
 				if(genColMap.get(itemId).size()<6)
-					genColMap.put(itemId, propertyMap.get("memory"));
-				return MemoryUtils.humanReadableByteCount(Long.parseLong(propertyMap.get("memory")), false);
+					genColMap.put(itemId, memoryVal);
+				return MemoryUtils.humanReadableByteCount(Long.parseLong(memoryVal), false);
 				//return propertyMap.get("memory");
 			}
 		});
@@ -190,10 +198,11 @@ public class JobTable extends CustomComponent {
 
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				// TODO Auto-generated method stub
-				JobStat job = (JobStat)itemId;
-				Map<String, String> propertyMap = job.getProperties();
+//				JobStat job = (JobStat)itemId;
+//				Map<String, String> propertyMap = job.getProperties();
 				//System.out.println("submitted:"+propertyMap.get("submissionTime"));
-				String val = propertyMap.get("submissionTime");
+				//String val = propertyMap.get("submissionTime");
+				String val = jobPropertyMap.get("submissionTime");
 				try{
 					Date d = new Date(Long.parseLong(val));
 					submittedTime.put(itemId, d.toString());
@@ -213,12 +222,14 @@ public class JobTable extends CustomComponent {
 
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				// TODO Auto-generated method stub
-				JobStat job = (JobStat)itemId;
-				Map<String, String> propertyMap = job.getProperties();
+				//JobStat job = (JobStat)itemId;
+				//Map<String, String> propertyMap = job.getProperties();
 				//System.out.println("executable:"+propertyMap.get("executable"));
+				//String execVal = propertyMap.get("executable");
+				String execVal = jobPropertyMap.get("executable");
 				if(genColMap.get(itemId).size()<6)
-					genColMap.put(itemId, propertyMap.get("executable"));
-				return propertyMap.get("executable");
+					genColMap.put(itemId, execVal);
+				return execVal;
 			}
 		});
 
@@ -227,11 +238,14 @@ public class JobTable extends CustomComponent {
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				// TODO Auto-generated method stub
 				JobStat job = (JobStat)itemId;
-				Map<String, String> propertyMap = job.getProperties();
+				//Map<String, String> propertyMap = job.getProperties();
+				jobPropertyMap = job.getProperties();
+				//String qVal=propertyMap.get("queue");
+				String qVal=jobPropertyMap.get("queue");
 				if(genColMap.get(itemId).size()<6)
-					genColMap.put(itemId, propertyMap.get("queue"));
+					genColMap.put(itemId, qVal);
 				//System.out.println("executable:"+propertyMap.get("executable"));
-				return propertyMap.get("queue");
+				return qVal;
 			}
 		});
 
@@ -402,7 +416,7 @@ public class JobTable extends CustomComponent {
 		tblJobs.setContainerDataSource(jobStatContainer);
 	}
 
-	public Object getTabcleClickVal() {
+	public Object getTableClickVal() {
 		// TODO Auto-generated method stub
 		return tblJobs.getValue();
 	}
