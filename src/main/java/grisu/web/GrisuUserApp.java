@@ -101,7 +101,7 @@ public class GrisuUserApp extends Application {
 				
 				Users selectedUser = (Users) userTab.getSelectedUser();
 				if(selectedUser!=null){
-					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
+					jobTab.populate(selectedUser.getDn(), userTab);//, selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
 					jobTabPan.setCaption("Jobs for "+selectedUser.getUserName());
 				}
 			}
@@ -125,7 +125,7 @@ public class GrisuUserApp extends Application {
 				// TODO Auto-generated method stub
 				Users selectedUser = (Users) userTab.getSelectedUser();
 				if(selectedUser!=null){
-					jobTab.populate(selectedUser.getDn(), selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
+					jobTab.populate(selectedUser.getDn(), userTab);//, selectedUser.getActiveJobCount(), selectedUser.getRunningJobCount());
 					jobTabPan.setCaption("Jobs for "+selectedUser.getUserName());
 				}
 			}
