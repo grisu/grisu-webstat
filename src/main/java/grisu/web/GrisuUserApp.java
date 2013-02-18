@@ -113,6 +113,7 @@ public class GrisuUserApp extends Application {
 		jobTabPan.setCaption("Jobs for selected user");
 		//jobTabPan.getContent().setSizeFull();
 		vertiSplitPanel.addComponent(jobTabPan);
+		vertiSplitPanel.setSplitPosition(60);
 		
 		horiSplitPanel.addComponent(vertiSplitPanel);
 		horiSplitPanel.setHeight("100%");

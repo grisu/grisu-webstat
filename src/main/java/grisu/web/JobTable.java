@@ -157,7 +157,10 @@ public class JobTable extends CustomComponent {
 		// TODO add user code here
 		tblJobs.setSelectable(true);
 		tblJobs.setColumnReorderingAllowed(true);
-		//tblJobs.setPageLength(15);
+
+		tblJobs.setPageLength(11);
+		tblJobsInactive.setPageLength(11);
+		tabSheet_1.setHeight("310px");
 
 		tblJobsInactive.setSelectable(true);
 		tblJobsInactive.setColumnReorderingAllowed(true);
@@ -167,6 +170,7 @@ public class JobTable extends CustomComponent {
 		verticalLayout_3.setSizeUndefined();
 		verticalLayout_4.setSizeUndefined();
 
+		
 		tblJobs.addGeneratedColumn("walltime", new ColumnGenerator() {
 
 			public Object generateCell(Table source, Object itemId, Object columnId) {
