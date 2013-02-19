@@ -135,9 +135,9 @@ public class JobTable extends CustomComponent {
 		genColNameMap.put("queue", 0);
 		genColNameMap.put("walltime", 1);
 		genColNameMap.put("cpus", 2);
-		genColNameMap.put("memory", 3);
-		genColNameMap.put("submitted", 4);
-		genColNameMap.put("executable", 5);
+		//genColNameMap.put("memory", 3);
+		genColNameMap.put("submitted", 3);
+		//genColNameMap.put("executable", 5);
 	}
 	
 	/**
@@ -154,14 +154,17 @@ public class JobTable extends CustomComponent {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 
+		tblJobs.setCacheRate(1000);
+		tblJobsInactive.setCacheRate(1000);
+		
 		// TODO add user code here
 		tblJobs.setSelectable(true);
 		tblJobs.setColumnReorderingAllowed(true);
 
-		tblJobs.setPageLength(11);
-		tblJobsInactive.setPageLength(11);
-		tabSheet_1.setHeight("310px");
-
+		tblJobs.setPageLength(12);
+		tblJobsInactive.setPageLength(12);
+		tabSheet_1.setHeight("320px");
+		
 		tblJobsInactive.setSelectable(true);
 		tblJobsInactive.setColumnReorderingAllowed(true);
 		
@@ -230,9 +233,10 @@ public class JobTable extends CustomComponent {
 				try{
 					Date d = new Date(Long.parseLong(val));
 					SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+				//	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 					
 					if(genColMap.get(itemId).size()<6)
-						genColMap.put(itemId, val);
+						genColMap.put(itemId, val);//genColMap.put(itemId, sdf2.format(d));
 					return sdf.format(d);
 				}catch(NumberFormatException nfe){
 					if(genColMap.get(itemId).size()<6)
@@ -345,9 +349,10 @@ public class JobTable extends CustomComponent {
 				try{
 					Date d = new Date(Long.parseLong(val));
 					SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-
+				//	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					
 					if(genColMap.get(itemId).size()<6)
-						genColMap.put(itemId, val);
+						genColMap.put(itemId, val);//genColMap.put(itemId, sdf2.format(d) );
 					return sdf.format(d);
 				}catch(NumberFormatException nfe){
 					if(genColMap.get(itemId).size()<6)
@@ -397,12 +402,18 @@ public class JobTable extends CustomComponent {
 		tblJobs.setContainerDataSource(jobContainer);
 		tblJobsInactive.setContainerDataSource(inactiveJobContainer);
 
-		tblJobs.setVisibleColumns(new Object [] {"jobname", "queue", "walltime", "cpus", "memory", "submitted", "executable", "fqan", "submissionType", "submittedJobDescription" });
-		tblJobs.setColumnHeaders(new String [] {"Job Name", "Queue", "Walltime", "CPUs", "Memory", "Submitted At", "Executable","Group", "Status",  "Application key" });		
+//		tblJobs.setVisibleColumns(new Object [] {"jobname", "queue", "walltime", "cpus", "memory", "submitted", "executable", "fqan", "submissionType", "submittedJobDescription" });
+//		tblJobs.setColumnHeaders(new String [] {"Job Name", "Queue", "Walltime", "CPUs", "Memory", "Submitted At", "Executable","Group", "Status",  "Application key" });		
+//
+//		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "queue", "walltime", "cpus", "memory", "submitted", "executable", "fqan", "submissionType", "submittedJobDescription" });
+//		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Queue", "Walltime", "CPUs", "Memory", "Submitted At", "Executable","Group", "Status",  "Application key" });		
 
-		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "queue", "walltime", "cpus", "memory", "submitted", "executable", "fqan", "submissionType", "submittedJobDescription" });
-		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Queue", "Walltime", "CPUs", "Memory", "Submitted At", "Executable","Group", "Status",  "Application key" });		
+		tblJobs.setVisibleColumns(new Object [] {"jobname", "queue", "walltime", "cpus", "submitted", "submissionType", "submittedJobDescription" });
+		tblJobs.setColumnHeaders(new String [] {"Job Name", "Queue", "Walltime", "CPUs", "Submitted At", "Status",  "Application key" });		
 
+		tblJobsInactive.setVisibleColumns(new Object [] {"jobname", "queue", "walltime", "cpus", "submitted", "submissionType", "submittedJobDescription" });
+		tblJobsInactive.setColumnHeaders(new String [] {"Job Name", "Queue", "Walltime", "CPUs", "Submitted At", "Status",  "Application key" });		
+		
 		/*jobContainer.setItemSorter(new DefaultItemSorter(new Comparator<Object>() {
 			public int compare(Object obj1, Object obj2) {
 				// TODO Auto-generated method stub
@@ -428,6 +439,7 @@ public class JobTable extends CustomComponent {
 					try{
 						ele1 = genColMap.get(o1).get(index);
 						ele2 = genColMap.get(o2).get(index);
+
 						//JobStat j1 = (JobStat)o1;
 						try{
 							num1=Integer.parseInt(ele1);
@@ -438,6 +450,7 @@ public class JobTable extends CustomComponent {
 								return num2-num1;
 						}
 						catch(NumberFormatException nfe){
+
 							if(tblJobs.isSortAscending())
 								return ele1.compareTo(ele2);
 							else
@@ -462,7 +475,7 @@ public class JobTable extends CustomComponent {
 					try{
 						ele1 = genColMap.get(o1).get(index);
 						ele2 = genColMap.get(o2).get(index);
-						//JobStat j1 = (JobStat)o1;
+
 						try{
 							num1=Integer.parseInt(ele1);
 							num2 = Integer.parseInt(ele2);
@@ -472,10 +485,12 @@ public class JobTable extends CustomComponent {
 								return num2-num1;
 						}
 						catch(NumberFormatException nfe){
-							if(tblJobsInactive.isSortAscending())
+							if(tblJobsInactive.isSortAscending()){
 								return ele1.compareTo(ele2);
-							else
+							}
+							else{
 								return ele2.compareTo(ele1);
+							}
 						}
 					}catch(Exception e){ //NullPointerException or IndexOutOfBoundException
 						return 0;
@@ -484,6 +499,7 @@ public class JobTable extends CustomComponent {
 				return super.compare(o1, o2);
 			}
 		});		
+
 //		
 //		Item item = jobContainer.getItem(0);
 //		Collection<?> temp = item.getItemPropertyIds();

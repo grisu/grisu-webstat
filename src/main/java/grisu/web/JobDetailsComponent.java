@@ -79,6 +79,8 @@ public class JobDetailsComponent extends CustomComponent{
 		jobProperties.add(Constants.COMMANDLINE_KEY);
 		jobProperties.add(Constants.NO_CPUS_KEY);
 		jobProperties.add(Constants.MEMORY_IN_B_KEY);
+		jobProperties.add(Constants.FQAN_KEY);
+		jobProperties.add(Constants.EXECUTABLE_KEY);
 		jobProperties.add(Constants.WALLTIME_IN_MINUTES_KEY);
 		jobProperties.add(Constants.SUBMISSIONLOCATION_KEY);
 		jobProperties.add(Constants.SUBMISSION_TIME_KEY);
