@@ -154,8 +154,8 @@ public class JobTable extends CustomComponent {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 
-		tblJobs.setCacheRate(1000);
-		tblJobsInactive.setCacheRate(1000);
+		tblJobs.setCacheRate(300);
+		tblJobsInactive.setCacheRate(300);
 		
 		// TODO add user code here
 		tblJobs.setSelectable(true);
