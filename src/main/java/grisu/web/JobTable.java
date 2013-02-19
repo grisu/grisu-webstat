@@ -154,8 +154,8 @@ public class JobTable extends CustomComponent {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 
-		tblJobs.setCacheRate(300);
-		tblJobsInactive.setCacheRate(300);
+		tblJobs.setCacheRate(1000);
+		tblJobsInactive.setCacheRate(1000);
 		
 		// TODO add user code here
 		tblJobs.setSelectable(true);
@@ -185,7 +185,12 @@ public class JobTable extends CustomComponent {
 				if(genColMap.get(itemId).size()<6)
 					genColMap.put(itemId, wallTimeval);
 				//System.out.println("walltime:"+propertyMap.get("walltime"));
-				return WalltimeUtils.convertSeconds(Integer.parseInt(wallTimeval)*60);
+				try{
+					return WalltimeUtils.convertSeconds(Integer.parseInt(wallTimeval)*60);
+				}catch(NumberFormatException nfe ){
+					System.out.println("nfe:"+wallTimeval);
+					return "0";
+				}
 			}
 		});
 
@@ -291,7 +296,7 @@ public class JobTable extends CustomComponent {
 					genColMap.put(itemId, wallTimeval);
 				//System.out.println("walltime:"+propertyMap.get("walltime"));
 				try{
-				return WalltimeUtils.convertSeconds(Integer.parseInt(wallTimeval)*60);
+					return WalltimeUtils.convertSeconds(Integer.parseInt(wallTimeval)*60);
 				}catch(NumberFormatException nfe ){
 					System.out.println("nfe:"+wallTimeval);
 					return "0";
